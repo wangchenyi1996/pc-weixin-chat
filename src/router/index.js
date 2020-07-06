@@ -21,7 +21,11 @@ const router = new Router({
     {
       path: '/my',
       component: () => import('@/page/resume/resume.vue')
-    }
+    },
+    {
+      path: '/myfile',
+      component: () => import('@/page/myfile/myfile.vue')
+    },
   ],
   linkActiveClass: 'active'
 })

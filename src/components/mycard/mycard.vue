@@ -18,9 +18,16 @@
       <router-link to="/chat" class="icon iconfont icon-msg"></router-link>
       <router-link to="/friend" class="icon iconfont icon-friend"></router-link>
       <router-link to="/my" class="icon iconfont icon-collection"></router-link>
+      <router-link to="/myfile" class="icon1 icons">
+        <!-- <img src="@/assets/icon-imgs/file-icon.png" alt class="icons" /> -->
+      </router-link>
     </div>
     <footer>
-      <i class="icon iconfont icon-more"></i>
+      <img src="@/assets/icon-imgs/xcx-icon.png" class="icons2" />
+      <div class="red-box">
+        <span class="dot-red"></span>
+        <i class="icon iconfont icon-more" style="margin-top:0;"></i>
+      </div>
     </footer>
   </div>
 </template>
@@ -43,7 +50,7 @@ export default {
 
     handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
-    //   console.log("新头像：", this.imageUrl);
+      //   console.log("新头像：", this.imageUrl);
       this.$store.commit("changeFace", this.imageUrl);
     },
     beforeAvatarUpload(file) {
@@ -64,8 +71,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../assets/fonts/iconfont.css';
-
 .mycard {
   position: relative;
   width: 100%;
@@ -81,6 +86,29 @@ export default {
   .navbar {
     width: 100%;
     text-align: center;
+  }
+
+  .icons {
+    background-image: url('../../assets/icon-imgs/file-icon.png');
+    width: 26px;
+    height: 26px;
+    margin-top: 22px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
+    &.active {
+      width: 26px;
+      height: 26px;
+      background-image: url('../../assets/icon-imgs/active-file.png');
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
+  }
+
+  .icon1 {
+    display: inline-block;
+    opacity: 0.8;
+    cursor: pointer;
   }
 
   .icon {
@@ -116,5 +144,25 @@ footer {
   bottom: 20px;
   width: 100%;
   text-align: center;
+
+  .red-box {
+    position: relative;
+    margin-top: 20px;
+    .dot-red {
+      position: absolute;
+      right:15px;
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 100%;
+      background-color: #FA5151;
+    }
+  }
+
+  .icons2 {
+    width: 26px;
+    height: 26px;
+    cursor: pointer;
+  }
 }
 </style>

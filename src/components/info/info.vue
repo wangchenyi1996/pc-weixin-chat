@@ -18,8 +18,8 @@
 	   	    	</div>
 	   	    </div>
 	   	    <div class="detInfo">
-	   	    	<div class="remark"><span>备&nbsp&nbsp&nbsp注</span>{{selectedFriend.remark}}</div>
-	   	    	<div class="area"><span>地&nbsp&nbsp&nbsp区</span>{{selectedFriend.area}}</div>
+	   	    	<div class="remark"><span>备&nbsp;&nbsp;&nbsp;注</span>{{selectedFriend.remark}}</div>
+	   	    	<div class="area"><span>地&nbsp;&nbsp;&nbsp;区</span>{{selectedFriend.area}}</div>
 	   	    	<div class="wxid"><span>微信号</span>{{selectedFriend.wxid}}</div>
 	   	    </div>
 	   	    <div class="send" @click="send">
