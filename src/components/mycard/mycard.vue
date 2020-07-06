@@ -1,7 +1,7 @@
 <!-- 最左边的选择框 -->
 <template>
   <div class="mycard">
-    <header>
+    <header @click.right.prevent="showOnline">
       <!-- <img :src="user.img" class="avatar" /> -->
       <!-- 更换头像 -->
       <el-upload
@@ -29,6 +29,20 @@
         <i class="icon iconfont icon-more" style="margin-top:0;"></i>
       </div>
     </footer>
+    <!-- 在线状态显示列表 -->
+    <div class="onlie-card" v-show="ishow">
+      <el-card class="box-card">
+        <div
+          v-for="item in onlineStatusList"
+          :key="item.id"
+          class="text-item"
+          @click="changeOnlineStatus(item)"
+        >
+          <span :class="item.id ===1 ? 'onlines' : item.id ===2 ? 'leaves' : item.id ===3 ? 'busys' : 'appears'" class="dot"></span>
+          <span>{{ item.name }}</span>
+        </div>
+      </el-card>
+    </div>
   </div>
 </template>
 
@@ -37,13 +51,24 @@ import { mapState } from "vuex";
 export default {
   data() {
     return {
-      imageUrl: ""
+      imageUrl: "",
+      ishow: false,
     };
   },
   computed: {
-    ...mapState(["user"])
+    ...mapState(["user", "onlineStatusList"]),
   },
   methods: {
+    // 选择离线还是在线
+    changeOnlineStatus(item) {
+      console.log(item);
+    },
+
+    // 显示在线状态
+    showOnline() {
+      this.ishow = !this.ishow;
+    },
+
     clearSearch() {
       this.$store.dispatch("search", "");
     },
@@ -148,9 +173,10 @@ footer {
   .red-box {
     position: relative;
     margin-top: 20px;
+
     .dot-red {
       position: absolute;
-      right:15px;
+      right: 15px;
       display: inline-block;
       width: 8px;
       height: 8px;
@@ -163,6 +189,51 @@ footer {
     width: 26px;
     height: 26px;
     cursor: pointer;
+  }
+}
+
+.onlie-card {
+  position: absolute;
+  left: 52px;
+  top: 20px;
+  z-index: 9;
+  width: 100px;
+  height: 170px;
+
+  >>> .box-card {
+    padding-left: 12px;
+    background: rgba(255, 255, 255, 0.9);
+  }
+
+  >>> .el-card__body {
+    padding: 0;
+  }
+
+  .text-item {
+    font-size: 13px;
+    margin: 16px 0;
+    .dot{
+       display:inline-block;
+      height: 10px;
+      width: 10px;
+      border-radius: 100%;
+      margin-right 10px;
+    }
+    .onlines {
+      background-color: #45C00C;
+    }
+
+    .leaves {
+       background-color: #FFBA00;
+    }
+
+    .busys {
+      background-color #F54F63
+    }
+
+    .appears {
+      background-color #D9D9D9
+    }
   }
 }
 </style>

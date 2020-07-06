@@ -8,10 +8,15 @@ const now = new Date();
 const state = {
   // 输入的搜索值
   searchText: '',
+  onlineStatusList:[
+    {id:1,name:'在线'},{id:2,name:'离开'},{id:3,name:'忙碌'},{id:4,name:'隐身'}
+  ],
+  backImg:  require('@/static/images/bg/bg1.jpg'),
   // 当前登录用户
   user: {
     name: 'ratel',
-    img: require('@/static/images/UserAvatar.jpg')
+    img: require('@/static/images/UserAvatar.jpg'),
+    onLineStatus:1,
   },
   // 对话好友列表
   chatlist: [{

@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-06 09:56:05
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-06 15:06:38
+ * @LastEditTime: 2020-07-06 16:38:44
 --> 
 <template>
   <div class="content">
@@ -12,7 +12,7 @@
       <search></search>
       <chatlist></chatlist>
     </div>
-    <div class="chatbox">
+    <div class="chatbox"  :style="{backgroundImage: 'url(' + backImg + ')', backgroundSize:'contain'}">
       <message></message>
       <v-text></v-text>
     </div>
@@ -20,16 +20,23 @@
 </template>
 
 <script>
+
 import search from "../../components/search/search";
 import chatlist from "../../components/chatlist/chatlist";
 import message from "../../components/message/message";
 import vText from "../../components/text/text";
+
+import {mapState} from 'vuex'
+
 export default {
   components: {
     search,
     chatlist,
     message,
     vText
+  },
+  computed: {
+   ...mapState(['backImg'])
   }
 };
 </script>

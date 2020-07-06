@@ -4,18 +4,20 @@
  * @Autor: 王强
  * @Date: 2020-07-06 11:22:09
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-06 11:42:23
+ * @LastEditTime: 2020-07-06 17:33:42
  */ 
 import Vue from 'vue'
 
 import { 
     Button,
     Upload,
-    Message
+    Message,
+    Card
 } from 'element-ui';
 
 Vue.use(Button)
 Vue.use(Upload)
+Vue.use(Card)
 
 
 Vue.prototype.$message = Message;
