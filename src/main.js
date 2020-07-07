@@ -3,6 +3,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+// 全局样式
+import '@/common/global.css'
+
 // 重置样式
 import './static/css/reset.css'
 

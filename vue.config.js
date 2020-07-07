@@ -1,3 +1,4 @@
+const path = require("path");
 // 拼接路径
 const resolve = dir => require('path').join(__dirname, dir)
 let publicPath = process.env.NODE_ENV === 'production' ? '/test' : './'
@@ -28,7 +29,25 @@ module.exports = {
         config.resolve.alias
             .set('@', resolve('src'))
             .set('@view', resolve('src/page'))
+
+        // 配置使用stylus全局变量
+        const types = ["vue-modules", "vue", "normal-modules", "normal"];
+        types.forEach(type =>
+            addStyleResource(config.module.rule("stylus").oneOf(type))
+        );
     },
+    // css: {
+    //     loaderOptions: {
+    //         // 设置 stylus 公用变量文件
+    //         sass: {
+    //             prependData: `@import '~@/common/style.scss';`
+    //         },
+                // 给 stylus-loader 传递选项
+                // stylus: {
+                //     import: '~@/common/stylus/color.styl'
+                // }
+    //     }
+    // },
     // CDN配置
     // configureWebpack: {
     //     externals: {
@@ -38,4 +57,14 @@ module.exports = {
     //         'axios': 'axios'
     //     }
     // }
+}
+
+// ====定义函数addStyleResource===
+function addStyleResource(rule) {
+    rule
+        .use("style-resource")
+        .loader("style-resources-loader")
+        .options({
+            patterns: [path.resolve(__dirname, "./src/common/stylus/varibles.styl")] //后面跟着的路径改成你自己放公共stylus变量的路径
+        });
 }

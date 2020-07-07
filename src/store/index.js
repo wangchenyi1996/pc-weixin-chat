@@ -8,15 +8,17 @@ const now = new Date();
 const state = {
   // 输入的搜索值
   searchText: '',
+  // 用户状态
   onlineStatusList:[
     {id:1,name:'在线'},{id:2,name:'离开'},{id:3,name:'忙碌'},{id:4,name:'隐身'}
   ],
+  // 聊天背景图
   backImg:  require('@/static/images/bg/bg1.jpg'),
   // 当前登录用户
   user: {
     name: 'ratel',
     img: require('@/static/images/UserAvatar.jpg'),
-    onLineStatus:1,
+    onLineStatus:1, //用户当前状态
   },
   // 对话好友列表
   chatlist: [{
@@ -222,6 +224,11 @@ const state = {
 }
 
 const mutations = {
+  // 改变用户状态
+  changeStatus(state,status){
+    state.user.onLineStatus = status
+  },
+
   // 更换头像
   changeFace(state,img){
     state.user.img = img

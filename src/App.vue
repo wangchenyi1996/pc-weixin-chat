@@ -27,8 +27,8 @@ export default {
   display: flex
   border-radius 50px
   margin: 150px auto
-  width: 860px
-  height: 600px
+  width: $width;
+  height: $height;
   background-color: #fff
   .sidebar
     width: 60px
