@@ -7,8 +7,22 @@
         :class="user.onLineStatus ===1 ? 'onlines' : user.onLineStatus ===2 ? 'leaves' : user.onLineStatus ===3 ? 'busys' : 'appears'"
         class="dot"
       ></span>
+      <!-- 更换头像 -->
+      <!-- <el-upload
+        class="avatar-uploader"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload"
+      >
+        <img :src="user.img" class="avatar" />
+          <span
+            :class="user.onLineStatus ===1 ? 'onlines' : user.onLineStatus ===2 ? 'leaves' : user.onLineStatus ===3 ? 'busys' : 'appears'"
+            class="dot"
+          ></span>
+      </el-upload>-->
     </header>
-    <!-- 用户资料蒙版 -->
+    <!-- 用户资料 -->
     <div class="user-info" v-show="showUser" @click="handleShowUser">
       <el-card class="box-card">
         <div slot="header" class="user-header u-f u-f-sbc">
@@ -17,7 +31,7 @@
               <span>李一桐</span>
               <img
                 src="@/assets/icon-imgs/person-icon.png"
-                alt
+                alt=""
                 style="height:16px;width:16px;margin-left:10px;"
               />
             </div>
@@ -34,8 +48,8 @@
         </div>
         <el-divider></el-divider>
         <div class="u-footer u-f u-f-end">
-          <img src="@/assets/icon-imgs/send-card.png" alt class="u-icon" />
-          <img src="@/assets/icon-imgs/send-msg.png" alt class="u-icon" />
+          <img src="@/assets/icon-imgs/send-card.png" alt="" class="u-icon"/>
+          <img src="@/assets/icon-imgs/send-msg.png" alt="" class="u-icon"/>
         </div>
       </el-card>
     </div>
@@ -44,16 +58,18 @@
       <router-link to="/chat" class="icon iconfont icon-msg"></router-link>
       <router-link to="/friend" class="icon iconfont icon-friend"></router-link>
       <router-link to="/my" class="icon iconfont icon-collection"></router-link>
-      <router-link to="/myfile" class="icon1 icons"></router-link>
+      <router-link to="/myfile" class="icon1 icons">
+        <!-- <img src="@/assets/icon-imgs/file-icon.png" alt class="icons" /> -->
+      </router-link>
     </div>
     <footer>
       <img src="@/assets/icon-imgs/xcx-icon.png" class="icons2" />
-      <div class="red-box" @click="showSetStatus">
+      <div class="red-box">
         <span class="dot-red"></span>
         <i class="icon iconfont icon-more" style="margin-top:0;"></i>
       </div>
     </footer>
-    <!-- 用户在线状态蒙版 -->
+    <!-- 蒙版 -->
     <div class="online-card" v-show="ishow" @click="handleShow">
       <!-- 在线状态显示列表 -->
       <el-card class="box-card">
@@ -88,19 +104,6 @@
         </div>
       </el-card>
     </div>
-
-    <!-- 设置蒙版 -->
-    <div class="set-cot" v-show="showSet" @click="handleshowSet">
-      <el-card class="box-card">
-        <div
-          v-for="item in setList"
-          :key="item.id"
-          class="text-item"
-        >
-          <span>{{ item.name }}</span>
-        </div>
-      </el-card>
-    </div>
   </div>
 </template>
 
@@ -111,17 +114,16 @@ export default {
     return {
       imageUrl: "",
       ishow: false,
-      showUser: false,
-      showSet:false
+      showUser:false
     };
   },
   computed: {
-    ...mapState(["user", "onlineStatusList","setList"])
+    ...mapState(["user", "onlineStatusList"])
   },
   methods: {
     // 查看用户资料
     lookUserinfo() {
-      this.showUser = !this.showUser;
+       this.showUser = !this.showUser;
     },
 
     // 关闭蒙版
@@ -130,7 +132,7 @@ export default {
     },
 
     // 关闭用户资料蒙版
-    handleShowUser() {
+    handleShowUser(){
       this.showUser = false;
     },
 
@@ -138,16 +140,6 @@ export default {
     changeOnlineStatus(id) {
       this.$store.commit("changeStatus", id);
       this.handleShow();
-    },
-
-    // 打开设置蒙版
-    showSetStatus(){
-       this.showSet = true
-    },
-
-    // 关闭设置蒙版
-     handleshowSet() {
-      this.showSet = false;
     },
 
     // 显示在线状态
@@ -378,7 +370,7 @@ footer {
 }
 
 .user-info {
-  position: absolute;
+   position: absolute;
   left: 0;
   top: 0;
   z-index: 9;
@@ -432,53 +424,15 @@ footer {
       font-size: 15px;
       color: #666;
     }
-
-    .u-footer {
-      .u-icon {
-        height: 26px;
-        width: 26px;
-        margin: 12px;
+    .u-footer{
+      .u-icon{
+        height:26px;
+        width:26px;
+        margin:12px;
         cursor: pointer;
       }
     }
-  }
-}
 
-.set-cot {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 9;
-  width: $width;
-  height: $height;
-  .el-card{
-    border:none;
-    border-radius:0;
-  }
-
-  .box-card {
-    position: absolute;
-    left: 60px;
-    bottom: 15px;
-    width: 145px;
-    height: 130px;
-    background: rgba(0, 0, 0, 0.8);
-    padding-bottom: 10px;
-    z-index: 6;
-
-    >>> .el-card__header {
-      padding: 10px;
-    }
-
-    >>> .el-card__body {
-      padding: 10px;
-    }
-    .text-item{
-      color:#999;
-      margin:20px 10px;
-      font-size:14px;
-      cursor: pointer;
-    }
   }
 }
 </style>

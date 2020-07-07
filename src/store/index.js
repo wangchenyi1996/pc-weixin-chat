@@ -6,6 +6,8 @@ Vue.use(Vuex)
 //获取当前时间
 const now = new Date();
 const state = {
+  // 设置选项列表
+  setList:[{id:1,name:'意见反馈'},{id: 2,name:'恢复和备份'},{id: 3,name:'设置'}],
   // 输入的搜索值
   searchText: '',
   // 用户状态

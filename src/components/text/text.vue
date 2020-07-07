@@ -2,7 +2,16 @@
 <template>
   <div class="text">
     <div class="emoji">
-      <i class="icon iconfont icon-look" @click="showEmoji=!showEmoji"></i>
+      <div class="u-f u-f-ac" style="padding-top:10px;">
+        <img src="@/assets/icon-imgs/emoij.png" class="icon-img" @click="showEmoji=!showEmoji" />
+        <img src="@/assets/icon-imgs/f-icon.png" class="icon-img" />
+        <img src="@/assets/icon-imgs/caputre.png" class="icon-img" />
+        <img src="@/assets/icon-imgs/send-msg.png" class="icon-img" />
+        <div style="margin-left:auto;" class="u-f u-f-ac">
+           <img src="@/assets/icon-imgs/voice-icon.png" class="icon-img" />
+           <img src="@/assets/icon-imgs/video-icon.png" class="icon-img" />
+        </div>
+      </div>
       <transition name="showbox">
         <div class="emojiBox" v-show="showEmoji">
           <li v-for="(item, index) in emojis" :key="index">
@@ -123,12 +132,15 @@ export default {
     height: 40px;
     line-height: 40px;
     font-size: 12px;
-    padding: 0 30px;
+    padding: 0 20px;
     box-sizing: border-box;
     color: #7c7c7c;
 
-    .icon-look {
+    .icon-img {
       cursor: pointer;
+      width:20px;
+      height:20px;
+      margin: 0 3px;
 
       &:hover {
         color: #1aad19;
@@ -184,6 +196,7 @@ export default {
     background: #f5f5f5;
     font-size: 14px;
     color: #7c7c7c;
+    cursor: pointer;
 
     &:hover {
       background: rgb(18, 150, 17);
