@@ -4,19 +4,19 @@
  * @Autor: 王强
  * @Date: 2020-07-07 14:14:08
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-07 16:24:50
+ * @LastEditTime: 2020-07-08 17:52:13
 --> 
 <template>
   <div class="login-contain" v-if="type==1">
     <h2 class="lg-header">用户登录</h2>
     <div class="lg-main">
       <div class="u-f u-f-ajc lg-input">
-        <el-input placeholder="请输入用户名/手机号码" v-model="username" clearable>
+        <el-input placeholder="请输入邮箱" v-model="email" clearable>
           <i slot="prefix" class="el-input__icon el-icon-user"></i>
         </el-input>
       </div>
-      <div class="u-f u-f-ajc lg-input">
-        <el-input placeholder="请输入密码" v-model="pwd" type="password" clearable>
+      <div class="u-f u-f-ajc lg-input" @keyup.enter="handleLogin">
+        <el-input placeholder="请输入密码" v-model="pwd" type="password" clearable >
           <i slot="prefix" class="el-input__icon el-icon-lock"></i>
         </el-input>
       </div>
@@ -27,7 +27,7 @@
         </div>
         <p style="font-size:12px;color:#666;margin-left:10px;cursor: pointer;">忘记密码？</p>
       </div>
-      <el-button type="danger" size="medium">登录</el-button>
+      <el-button type="danger" size="medium" @click="handleLogin" :loading="isloading">登录</el-button>
       <div
         class="u-f u-f-ajc"
         style="text-align: center;margin-bottom: 15px;font-size: 13px;cursor: pointer;"
@@ -60,11 +60,11 @@
         </el-input>
       </div>
       <div class="u-f u-f-ajc lg-input">
-        <el-input placeholder="请输入确认密码" v-model="confirmpwd" type="password" clearable>
+        <el-input placeholder="请输入邮箱" v-model="email" clearable>
           <i slot="prefix" class="el-input__icon el-icon-lock"></i>
         </el-input>
       </div>
-      <el-button type="danger" size="medium">注册</el-button>
+      <el-button type="danger" size="medium" @click="handleRegister" :loading="isloading">注册</el-button>
       <div
         class="u-f u-f-ajc"
         style="text-align: center;margin-bottom: 15px;font-size: 13px;cursor: pointer;"
@@ -77,19 +77,131 @@
 </template>
 
 <script>
+import { userLogin, userRegister } from "../../utils/network/user";
 export default {
   data() {
     return {
       username: "",
       pwd: "",
-      confirmpwd: "",
+      email: "",
       checked: false,
-      type: 1
+      type: 1,
+      isloading: false
     };
   },
   methods: {
     goReg(type) {
+      this.isloading = false;
       this.type = type;
+    },
+    // 登录
+    async handleLogin() {
+       // 先判断过滤
+      if (!this.email) {
+        this.$message({
+          message: "邮箱不能为空",
+          type: "error",
+          duration: 1500
+        });
+        return;
+      }
+      if (!this.pwd) {
+        this.$message({
+          message: "密码不能为空",
+          type: "error",
+          duration: 1500
+        });
+        return;
+      }
+      if (!/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.email)) {
+        this.$message({
+          message: "邮箱格式不正确",
+          type: "error",
+          duration: 1500
+        });
+        return;
+      }
+      this.isloading = true;
+      
+      let users = {
+        pwd: this.pwd,
+        email: this.email
+      };
+      let result = await userLogin(users);
+      if (result.code === 200) {
+        this.isloading = false
+        // 更改用户信息
+        this.$store.commit('getUserInfo',result.user)
+        this.$message({
+          message: result.msg,
+          type: "success",
+          duration: 1500
+        });
+        this.$router.replace('/chat')
+      } else {
+        this.isloading = false
+        this.$message({
+          message: result.msg,
+          type: "error",
+          duration: 1500
+        });
+      }
+      
+    },
+    // 注册
+    async handleRegister() {
+      // 先判断过滤
+      if (!this.username) {
+        this.$message({
+          message: "用户名不能为空",
+          type: "error",
+          duration: 1500
+        });
+        return;
+      }
+      if (!this.pwd) {
+        this.$message({
+          message: "密码不能为空",
+          type: "error",
+          duration: 1500
+        });
+        return;
+      }
+      if (!/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.email)) {
+        this.$message({
+          message: "邮箱格式不正确",
+          type: "error",
+          duration: 1500
+        });
+        return;
+      }
+      this.isloading = true;
+
+      let users = {
+        username: this.username,
+        pwd: this.pwd,
+        email: this.email,
+        loginTime: new Date()
+      };
+      let result = await userRegister(users);
+      if (result.code === 200) {
+         // 更改用户信息
+        this.$store.commit('getUserInfo',result.user)
+        this.isloading = false
+        this.$message({
+          message: result.msg,
+          type: "success",
+          duration: 1500
+        });
+        this.$router.replace('/chat')
+      } else {
+        this.isloading = false
+        this.$message({
+          message: result.msg,
+          type: "error",
+          duration: 1500
+        });
+      }
     }
   }
 };
@@ -108,15 +220,12 @@ export default {
 
 >>> .el-input__inner {
   padding-left: 44px;
-//   &:focus {
-//     box-shadow: 0px 2px 10px 0px rgba(26, 47, 99, 0.2);
-//   }
 }
 
 >>> .el-input__inner:focus {
-    border-color: rgba(0,0,0,0);
-    outline: 0;
-    box-shadow: 0px 2px 15px 0px rgba(255, 69, 0, 0.25);
+  border-color: rgba(0, 0, 0, 0);
+  outline: 0;
+  box-shadow: 0px 2px 15px 0px rgba(255, 69, 0, 0.25);
 }
 
 >>> .el-checkbox__input.is-checked .el-checkbox__inner {

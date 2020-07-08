@@ -3,167 +3,172 @@ import Vuex from 'vuex'
 import router from '../router'
 Vue.use(Vuex)
 
+import createPersistedState from 'vuex-persistedstate'
+
 //获取当前时间
 const now = new Date();
 const state = {
   // 设置选项列表
-  setList:[{id:1,name:'意见反馈'},{id: 2,name:'恢复和备份'},{id: 3,name:'设置'}],
+  setList: [{ id: 1, name: '意见反馈' }, { id: 2, name: '恢复和备份' }, { id: 3, name: '设置' }],
   // 输入的搜索值
   searchText: '',
   // 用户状态
-  onlineStatusList:[
-    {id:1,name:'在线'},{id:2,name:'离开'},{id:3,name:'忙碌'},{id:4,name:'隐身'}
+  onlineStatusList: [
+    { id: 1, name: '在线' }, { id: 2, name: '离开' }, { id: 3, name: '忙碌' }, { id: 4, name: '隐身' }
   ],
   // 聊天背景图
-  backImg:  require('@/static/images/bg/bg1.jpg'),
+  backImg: require('@/static/images/bg/bg1.jpg'),
   // 当前登录用户
   user: {
-    name: 'ratel',
+    name: '',
     img: require('@/static/images/UserAvatar.jpg'),
-    onLineStatus:1, //用户当前状态
+    onLineStatus: 1, //用户当前状态
+    socketid: '',
+    email: '',
+    loginTime: Date.now()
   },
   // 对话好友列表
   chatlist: [{
-      id: 1,
-      user: {
-        name: '张三',
-        img: require('@/static/images/mother.jpg')
-      },
-      messages: [{
-          content: '么么哒，妈咪爱你', //聊天内容
-          date: now //时间
-        },
-        {
-          content: '按回车可以发送信息，还可以给我发送表情哟',
-          date: now
-        }
-      ],
-      index: 1 // 当前在聊天列表中的位置,从1开始
-
+    id: 1,
+    user: {
+      name: '张三',
+      img: require('@/static/images/mother.jpg')
+    },
+    messages: [{
+      content: '么么哒，妈咪爱你', //聊天内容
+      date: now //时间
     },
     {
-      id: 2,
-      user: {
-        name: '李四',
-        img: require('@/static/images/father.jpg')
-      },
-      messages: [{
-        content: 'Are you kidding me?',
-        date: now
-      }],
-      index: 2
-    },
-    {
-      id: 3,
-      user: {
-        name: '机器人',
-        img: require('@/static/images/vue.jpg')
-      },
-      messages: [{
-        content: '我会跟你聊聊天的哟',
-        date: now
-      }],
-      index: 3
+      content: '按回车可以发送信息，还可以给我发送表情哟',
+      date: now
     }
+    ],
+    index: 1 // 当前在聊天列表中的位置,从1开始
+
+  },
+  {
+    id: 2,
+    user: {
+      name: '李四',
+      img: require('@/static/images/father.jpg')
+    },
+    messages: [{
+      content: 'Are you kidding me?',
+      date: now
+    }],
+    index: 2
+  },
+  {
+    id: 3,
+    user: {
+      name: '机器人',
+      img: require('@/static/images/vue.jpg')
+    },
+    messages: [{
+      content: '我会跟你聊聊天的哟',
+      date: now
+    }],
+    index: 3
+  }
   ],
   // 好友列表
   friendlist: [{
-      id: 0,
-      wxid: "", //微信号
-      initial: '新的朋友', //姓名首字母
-      img: require('@/static/images/newfriend.jpg'), //头像
-      signature: "", //个性签名
-      nickname: "新的朋友", //昵称
-      sex: 0, //性别 1为男，0为女
-      remark: "新的朋友", //备注
-      area: "", //地区
-    },
-    {
-      id: 1,
-      wxid: "AmorAres-", //微信号
-      initial: 'A', //姓名首字母
-      img: require('@/static/images/小姨妈.jpg'), //头像
-      signature: "每天我就萌萌哒", //个性签名
-      nickname: "Amor", //昵称
-      sex: 0, //性别 1为男，0为女
-      remark: "Amor", //备注
-      area: "浙江 宁波", //地区
-    },
-    {
-      id: 2,
-      wxid: "Big-fly",
-      initial: 'B',
-      img: require('@/static/images/大飞哥.jpg'),
-      signature: "你不知道的js",
-      nickname: "fly",
-      sex: 1,
-      remark: "大飞哥",
-      area: "奥地利 布尔根兰",
-    },
-    {
-      id: 3,
-      wxid: "microzz",
-      initial: 'D',
-      img: require('@/static/images/microzz.jpg'),
-      signature: "学习让我快乐让我成长",
-      nickname: "microzz",
-      sex: 1,
-      remark: "大佬",
-      area: "江西 赣州",
-    },
-    {
-      id: 4,
-      wxid: "hwn0366",
-      initial: 'F',
-      img: require('@/static/images/father.jpg'),
-      signature: "学习让我快乐让我成长",
-      nickname: "丢",
-      sex: 1,
-      remark: "father",
-      area: "江西 抚州",
-    },
-    {
-      id: 5,
-      wxid: "orange66",
-      initial: 'J',
-      img: require('@/static/images/orange.jpg'),
-      signature: "你可以笑的很阳光！",
-      nickname: "orange",
-      sex: 1,
-      remark: "橘子",
-      area: "江西 赣州",
-    },
-    {
-      id: 6,
-      wxid: "Seto_L",
-      img: require('@/static/images/加菲猫.jpg'),
-      signature: "自强不息",
-      nickname: "21",
-      sex: 1,
-      remark: "加菲",
-      area: "北京 海淀",
-    },
-    {
-      id: 7,
-      wxid: "wxid_itjz73t1ajt722",
-      initial: 'M',
-      img: require('@/static/images/mother.jpg'),
-      signature: "开开心心就好",
-      nickname: "娄娄",
-      sex: 0,
-      remark: "妈咪",
-      area: "江西 抚州",
-    },
-    {
-      id: 8,
-      wxid: "hj960503",
-      img: require('@/static/images/萌萌俊.jpg'),
-      signature: "原谅我有点蠢。。",
-      nickname: "。。。。。",
-      sex: 1,
-      remark: "萌萌均",
-      area: "江西 萍乡",
-    }
+    id: 0,
+    wxid: "", //微信号
+    initial: '新的朋友', //姓名首字母
+    img: require('@/static/images/newfriend.jpg'), //头像
+    signature: "", //个性签名
+    nickname: "新的朋友", //昵称
+    sex: 0, //性别 1为男，0为女
+    remark: "新的朋友", //备注
+    area: "", //地区
+  },
+  {
+    id: 1,
+    wxid: "AmorAres-", //微信号
+    initial: 'A', //姓名首字母
+    img: require('@/static/images/小姨妈.jpg'), //头像
+    signature: "每天我就萌萌哒", //个性签名
+    nickname: "Amor", //昵称
+    sex: 0, //性别 1为男，0为女
+    remark: "Amor", //备注
+    area: "浙江 宁波", //地区
+  },
+  {
+    id: 2,
+    wxid: "Big-fly",
+    initial: 'B',
+    img: require('@/static/images/大飞哥.jpg'),
+    signature: "你不知道的js",
+    nickname: "fly",
+    sex: 1,
+    remark: "大飞哥",
+    area: "奥地利 布尔根兰",
+  },
+  {
+    id: 3,
+    wxid: "microzz",
+    initial: 'D',
+    img: require('@/static/images/microzz.jpg'),
+    signature: "学习让我快乐让我成长",
+    nickname: "microzz",
+    sex: 1,
+    remark: "大佬",
+    area: "江西 赣州",
+  },
+  {
+    id: 4,
+    wxid: "hwn0366",
+    initial: 'F',
+    img: require('@/static/images/father.jpg'),
+    signature: "学习让我快乐让我成长",
+    nickname: "丢",
+    sex: 1,
+    remark: "father",
+    area: "江西 抚州",
+  },
+  {
+    id: 5,
+    wxid: "orange66",
+    initial: 'J',
+    img: require('@/static/images/orange.jpg'),
+    signature: "你可以笑的很阳光！",
+    nickname: "orange",
+    sex: 1,
+    remark: "橘子",
+    area: "江西 赣州",
+  },
+  {
+    id: 6,
+    wxid: "Seto_L",
+    img: require('@/static/images/加菲猫.jpg'),
+    signature: "自强不息",
+    nickname: "21",
+    sex: 1,
+    remark: "加菲",
+    area: "北京 海淀",
+  },
+  {
+    id: 7,
+    wxid: "wxid_itjz73t1ajt722",
+    initial: 'M',
+    img: require('@/static/images/mother.jpg'),
+    signature: "开开心心就好",
+    nickname: "娄娄",
+    sex: 0,
+    remark: "妈咪",
+    area: "江西 抚州",
+  },
+  {
+    id: 8,
+    wxid: "hj960503",
+    img: require('@/static/images/萌萌俊.jpg'),
+    signature: "原谅我有点蠢。。",
+    nickname: "。。。。。",
+    sex: 1,
+    remark: "萌萌均",
+    area: "江西 萍乡",
+  }
 
   ],
   //emoji表情
@@ -226,13 +231,31 @@ const state = {
 }
 
 const mutations = {
+  // 获取用户数据
+  getUserInfo(state, user) {
+    state.user.name = user.username
+    state.user.img = user.img
+    state.user.onlineStatus = user.onLineStatus
+    state.user.socketid = user.socketid
+    state.user.email = user.email
+    state.user.logintime = user.logintime
+  },
+  // 退出登录
+  logoutUser(state) {
+    state.user.name = ''
+    state.user.img = require('@/static/images/UserAvatar.jpg')
+    state.user.onlineStatus = 1
+    state.user.socketid = ''
+    state.user.email = ''
+  },
+
   // 改变用户状态
-  changeStatus(state,status){
+  changeStatus(state, status) {
     state.user.onLineStatus = status
   },
 
   // 更换头像
-  changeFace(state,img){
+  changeFace(state, img) {
     state.user.img = img
   },
   // 从localStorage 中获取数据
@@ -301,7 +324,9 @@ const mutations = {
       router.push({ path: '/chat' })
     }
   }
+
 }
+
 const getters = {
   // 筛选出含有搜索值的聊天列表
   searchedChatlist(state) {
@@ -340,13 +365,24 @@ const actions = {
   sendMessage: ({ commit }, msg) => commit('sendMessage', msg),
   send: ({ commit }) => commit('send'),
   initData: ({ commit }) => commit('initData'),
-  
 }
 const store = new Vuex.Store({
   state,
   mutations,
   getters,
-  actions
+  actions,
+  plugins: [
+    createPersistedState({
+      storage: window.localStorage,
+      reducer(val) {
+        // console.log('所有state:', val)
+        return {
+          user: val.user
+        }
+      }
+
+    })
+  ]
 })
 
 // 监听聊天列表的值， 发生变化就保存在localStorage中
@@ -355,7 +391,7 @@ store.watch(
   (val) => {
     localStorage.setItem('vue-chat', JSON.stringify(val));
   }, {
-    deep: true
-  }
+  deep: true
+}
 )
 export default store;

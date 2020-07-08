@@ -84,7 +84,7 @@
           </div>
           <p>关闭桌面通知</p>
           <p>关闭提醒声音</p>
-          <p>退出</p>
+          <p @click="logout">退出</p>
         </div>
       </el-card>
     </div>
@@ -176,6 +176,12 @@ export default {
         this.$message.error("上传头像图片大小不能超过 2MB!");
       }
       return isJPG && isLt2M;
+    },
+    // 退出登录
+    logout(){
+      this.$store.commit('logoutUser')
+      this.$router.replace('/login')
+      this.$message('退出登录成功')
     }
   }
 };
@@ -232,7 +238,7 @@ export default {
   }
 
   .icons {
-    background-image: url('../../assets/icon-imgs/file-icon.png');
+    background-image: url('../../assets/icon-imgs/pyq1.png');
     width: 26px;
     height: 26px;
     margin-top: 22px;
@@ -242,7 +248,7 @@ export default {
     &.active {
       width: 26px;
       height: 26px;
-      background-image: url('../../assets/icon-imgs/active-file.png');
+      background-image: url('../../assets/icon-imgs/pyq2.png');
       background-repeat: no-repeat;
       background-size: 100% 100%;
     }
@@ -373,6 +379,7 @@ footer {
       line-height: 2;
       font-size: 13px;
       text-align: center;
+      cursor:pointer;
     }
   }
 }

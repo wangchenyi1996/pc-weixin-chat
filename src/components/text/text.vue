@@ -124,7 +124,7 @@ export default {
 .text {
   position: relative;
   height: 150px;
-  background: #fff;
+  background: rgba(255,255,255,.8);
 
   .emoji {
     position: relative;
@@ -180,6 +180,7 @@ export default {
     outline: none;
     font-family: 'Micrsofot Yahei';
     resize: none;
+    background-color rgba(255,255,255,0)
   }
 
   .send {

@@ -1,3 +1,4 @@
+const Config = require("./src/utils/config.js");
 const path = require("path");
 // 拼接路径
 const resolve = dir => require('path').join(__dirname, dir)
@@ -14,9 +15,9 @@ module.exports = {
         open: true, //配置自动启动浏览器
         proxy: {
             "/api": {
-                target: "https://jsonplaceholder.typicode.com/posts/",
+                target: Config.domain,
                 changeOrigin: true,
-                // ws: true,//websocket支持
+                ws: false, //websocket支持
                 secure: false,
                 pathRewrite: {
                     "^/api": "/"
