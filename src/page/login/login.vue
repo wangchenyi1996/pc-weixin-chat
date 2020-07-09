@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-07 14:14:08
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-08 17:52:13
+ * @LastEditTime: 2020-07-09 11:02:45
 --> 
 <template>
   <div class="login-contain" v-if="type==1">
@@ -89,7 +89,19 @@ export default {
       isloading: false
     };
   },
+  created() {
+    // 监听 用户登录 socket事件
+    this.getUser()
+  },
   methods: {
+    // 获取链接socket后的用户信息
+    getUser(){
+      this.socket.on('getUser',(user)=>{
+        // 更改用户信息
+        this.$store.commit('getUserInfo',user)
+      })
+    },
+
     goReg(type) {
       this.isloading = false;
       this.type = type;
@@ -130,8 +142,11 @@ export default {
       let result = await userLogin(users);
       if (result.code === 200) {
         this.isloading = false
+        // 发送socket
+        this.socket.emit('userlogin',result.user)
         // 更改用户信息
-        this.$store.commit('getUserInfo',result.user)
+        // this.$store.commit('getUserInfo',result.user)
+        
         this.$message({
           message: result.msg,
           type: "success",

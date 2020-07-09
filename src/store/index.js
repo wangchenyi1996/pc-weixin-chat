@@ -25,7 +25,7 @@ const state = {
     onLineStatus: 1, //用户当前状态
     socketid: '',
     email: '',
-    loginTime: Date.now()
+    logintime: Date.now()
   },
   // 对话好友列表
   chatlist: [{
@@ -233,9 +233,10 @@ const state = {
 const mutations = {
   // 获取用户数据
   getUserInfo(state, user) {
+    console.log('用户：',user)
     state.user.name = user.username
     state.user.img = user.img
-    state.user.onlineStatus = user.onLineStatus
+    state.user.onLineStatus = user.onlineStatus
     state.user.socketid = user.socketid
     state.user.email = user.email
     state.user.logintime = user.logintime
@@ -244,7 +245,7 @@ const mutations = {
   logoutUser(state) {
     state.user.name = ''
     state.user.img = require('@/static/images/UserAvatar.jpg')
-    state.user.onlineStatus = 1
+    state.user.onLineStatus = 2
     state.user.socketid = ''
     state.user.email = ''
   },

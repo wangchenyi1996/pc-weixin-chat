@@ -3,6 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+Vue.config.productionTip = false
+
 // 全局样式
 import '@/common/global.css'
 
@@ -15,7 +17,10 @@ import './assets/fonts/iconfont.css';
 // 引入 element-ui
 import '@/elementui/index.js'
 
-Vue.config.productionTip = false
+// socket
+import io from '@/assets/socket/socket.io.js'
+Vue.prototype.socket = io('http://localhost:8888')
+// console.log(Vue.prototype.socket)
 
 new Vue({
   router,

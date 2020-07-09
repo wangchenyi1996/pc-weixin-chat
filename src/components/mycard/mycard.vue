@@ -106,6 +106,8 @@
 
 <script>
 import { mapState } from "vuex";
+import { pathToBase64 } from '@/utils/base64ToImage.js'
+
 export default {
   data() {
     return {
@@ -159,10 +161,11 @@ export default {
       this.$store.dispatch("search", "");
     },
 
-    handleAvatarSuccess(res, file) {
+    async handleAvatarSuccess(res, file) {
       this.imageUrl = URL.createObjectURL(file.raw);
+      let base64 =await pathToBase64(this.imageUrl)
       //   console.log("新头像：", this.imageUrl);
-      this.$store.commit("changeFace", this.imageUrl);
+      this.$store.commit("changeFace", base64);
     },
     beforeAvatarUpload(file) {
       const typeArr = ["image/png", "image/jpeg", "image/jpg"];
