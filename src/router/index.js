@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-06 09:19:13
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-09 10:55:06
+ * @LastEditTime: 2020-07-15 09:39:16
  */
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -28,7 +28,7 @@ const router = new Router({
         keepAlive: true, // true :缓存  false :不缓存
         isBack: false, //用于判断上一个页面是哪个
         isShowAside: true,
-        requiresAuth:true
+        requiresAuth: true
       }
     },
     {
@@ -38,7 +38,7 @@ const router = new Router({
         keepAlive: true, // true :缓存  false :不缓存
         isBack: false, //用于判断上一个页面是哪个
         isShowAside: true,
-        requiresAuth:true
+        requiresAuth: true
       }
     },
     {
@@ -48,7 +48,7 @@ const router = new Router({
         keepAlive: true, // true :缓存  false :不缓存
         isBack: false, //用于判断上一个页面是哪个
         isShowAside: true,
-        requiresAuth:true
+        requiresAuth: true
       }
     },
     {
@@ -58,7 +58,7 @@ const router = new Router({
         keepAlive: true, // true :缓存  false :不缓存
         isBack: false, //用于判断上一个页面是哪个
         isShowAside: true,
-        requiresAuth:true
+        requiresAuth: true
       }
     },
     {
@@ -68,7 +68,7 @@ const router = new Router({
         keepAlive: true, // true :缓存  false :不缓存
         isBack: false, //用于判断上一个页面是哪个
         isShowAside: false,
-        requiresAuth:false
+        requiresAuth: false
       }
     },
   ],
@@ -80,21 +80,21 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   let flag = store.state.user.name || false
   if (to.matched.some(record => record.meta.requiresAuth)) { // 判断该路由是否需要登录权限
-    if (flag) { //也可以用vuex来判断
-      next()
-    } else {
-      next('/login')
-    }
-  } else {
-    if (flag) { //也可以用vuex来判断
-      if (to.path == '/login') {
-        next('/chat')
+      if (flag) { //也可以用vuex来判断
+          next()
       } else {
-        next()
+          next('/login')
       }
-    } else {
-      next()
-    }
+  } else {
+      if (flag) { //也可以用vuex来判断
+          if (to.path === '/login') {
+              next('/chat')
+          } else {
+              next()
+          }
+      } else {
+          next()
+      }
   }
 
 })

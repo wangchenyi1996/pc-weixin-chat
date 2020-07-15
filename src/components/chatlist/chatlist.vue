@@ -1,3 +1,11 @@
+<!--
+ * @Description: 
+ * @Version: 1.0
+ * @Autor: 王强
+ * @Date: 2020-07-06 09:50:26
+ * @LastEditors: 王强
+ * @LastEditTime: 2020-07-15 09:01:48
+--> 
 <!-- 聊天列表 -->
 <template>
   <div class="msglist">
@@ -40,17 +48,17 @@ export default {
         console.log(this.searchedChatlist);
     },
     filters: {
-            // 将日期过滤为 hour:minutes
-            time (date) {
-                if (typeof date === 'string') {
-                    date = new Date(date);
-                }
-                if(date.getMinutes()<10){
-                  return date.getHours() + ':0' +date.getMinutes();
-                }else{
-                  return date.getHours() + ':' + date.getMinutes();
-                }
+        // 将日期过滤为 hour:minutes
+        time (date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
             }
+            if(date.getMinutes()<10){
+                return date.getHours() + ':0' +date.getMinutes();
+            }else{
+                return date.getHours() + ':' + date.getMinutes();
+            }
+        }
     },
 }
 </script>

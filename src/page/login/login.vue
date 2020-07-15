@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-07 14:14:08
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-09 11:02:45
+ * @LastEditTime: 2020-07-15 09:46:31
 --> 
 <template>
   <div class="login-contain" v-if="type==1">
@@ -96,9 +96,16 @@ export default {
   methods: {
     // 获取链接socket后的用户信息
     getUser(){
-      this.socket.on('getUser',(user)=>{
+      this.socket.on('getUser',(result)=>{
+        // console.log(result)
         // 更改用户信息
-        this.$store.commit('getUserInfo',user)
+        this.$store.commit('getUserInfo',result.user)
+        this.$message({
+          message: result.msg,
+          type: "success",
+          duration: 1000
+        });
+        this.$router.replace('/chat')
       })
     },
 
@@ -143,16 +150,15 @@ export default {
       if (result.code === 200) {
         this.isloading = false
         // 发送socket
-        this.socket.emit('userlogin',result.user)
-        // 更改用户信息
-        // this.$store.commit('getUserInfo',result.user)
-        
-        this.$message({
-          message: result.msg,
-          type: "success",
-          duration: 1500
-        });
-        this.$router.replace('/chat')
+        this.socket.emit('userlogin',result)
+        // setTimeout(()=>{
+        //   this.$message({
+        //     message: result.msg,
+        //     type: "success",
+        //     duration: 1000
+        //   });
+        //   this.$router.replace('/chat')
+        // },1000)
       } else {
         this.isloading = false
         this.$message({

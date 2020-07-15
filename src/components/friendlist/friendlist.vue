@@ -1,8 +1,16 @@
+<!--
+ * @Description: 
+ * @Version: 1.0
+ * @Autor: 王强
+ * @Date: 2020-07-06 09:50:26
+ * @LastEditors: 王强
+ * @LastEditTime: 2020-07-15 09:02:08
+--> 
 <!-- 好友列表 -->
 <template>
  <div class="friendlist">
  	<ul>
-        <li v-for="item in searchedFriendlist" class="frienditem"  :class="{ noborder: !item.initial}">
+        <li v-for="item in searchedFriendlist" class="frienditem"  :class="{ noborder: !item.initial}" :key="item.id">
             <div class="list_title" v-if="item.initial">{{item.initial}}</div>
             <div class="friend-info" :class="{ active: item.id === selectFriendId }" @click="selectFriend(item.id)">
                 <img class="avatar"  width="36" height="36" :src="item.img">
