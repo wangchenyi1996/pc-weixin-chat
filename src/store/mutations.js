@@ -114,6 +114,9 @@ const mutations = {
         if( state.chatlist.length > 1){
             state.selectId = state.selectId + 1
         }
+        let chatlist = JSON.parse(localStorage.getItem('vue-chat'))
+        chatlist.splice(state.chatDelIndex,1)
+        localStorage.setItem('vue-chat',JSON.stringify(chatlist))
     }
 
 }
