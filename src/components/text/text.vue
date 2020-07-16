@@ -62,6 +62,7 @@ export default {
     },
     // 点击发送按钮发送信息
     async send() {
+      this.showEmoji = false
       if (this.content.length <= 1) {
         this.warn = true;
         this.content = "";
@@ -105,6 +106,8 @@ export default {
           this.$store.dispatch("sendMessage", msg);
           this.content = "";
         }
+
+        
       }
     }
   },

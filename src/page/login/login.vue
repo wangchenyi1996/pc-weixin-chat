@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-07 14:14:08
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-15 09:46:31
+ * @LastEditTime: 2020-07-16 13:52:09
 --> 
 <template>
   <div class="login-contain" v-if="type==1">
@@ -96,12 +96,12 @@ export default {
   methods: {
     // 获取链接socket后的用户信息
     getUser(){
-      this.socket.on('getUser',(result)=>{
-        // console.log(result)
+      this.socket.on('getUsers',(result)=>{
+        console.log(result)
         // 更改用户信息
         this.$store.commit('getUserInfo',result.user)
         this.$message({
-          message: result.msg,
+          message:result.msg,
           type: "success",
           duration: 1000
         });
@@ -150,7 +150,7 @@ export default {
       if (result.code === 200) {
         this.isloading = false
         // 发送socket
-        this.socket.emit('userlogin',result)
+        this.socket.emit('userlogins',result)
         // setTimeout(()=>{
         //   this.$message({
         //     message: result.msg,

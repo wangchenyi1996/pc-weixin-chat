@@ -14,7 +14,7 @@
         <div slot="header" class="user-header u-f u-f-sbc">
           <div class="u-left u-f-c u-f-jsb">
             <div style="font-size:15px;margin-top:8px" class="u-f u-f-ac">
-              <span>李一桐</span>
+              <span>{{user.name}}</span>
               <img
                 src="@/assets/icon-imgs/person-icon.png"
                 alt

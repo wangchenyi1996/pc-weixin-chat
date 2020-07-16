@@ -1,5 +1,5 @@
 import router from '../router'
-
+import store from './index'
 const mutations = {
     // 添加新朋友到好友列表
     addNewFriendToList(state, friend) {
@@ -103,8 +103,18 @@ const mutations = {
             state.selectId = msg.index
             router.push({ path: '/chat' })
         }
+    },
+
+    // 聊天列表 信息索引
+    deleteChatItem(state, index) {
+        state.chatDelIndex = index
+        // console.log(state.chatDelIndex)
+        // state.chatlist.splice(state.chatDelIndex,1)
+        store.getters.searchedChatlist.splice(state.chatDelIndex, 1)
+        if( state.chatlist.length > 1){
+            state.selectId = state.selectId + 1
+        }
     }
 
 }
-
 export default mutations;
