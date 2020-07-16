@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-06 09:50:26
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-15 09:01:48
+ * @LastEditTime: 2020-07-15 15:46:58
 --> 
 <!-- 聊天列表 -->
 <template>
@@ -45,7 +45,7 @@ export default {
     	])	
     },
     mounted () {
-        console.log(this.searchedChatlist);
+        // console.log(this.searchedChatlist);
     },
     filters: {
         // 将日期过滤为 hour:minutes

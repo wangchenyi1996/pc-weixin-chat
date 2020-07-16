@@ -1,3 +1,11 @@
+<!--
+ * @Description: 
+ * @Version: 1.0
+ * @Autor: 王强
+ * @Date: 2020-07-06 09:56:05
+ * @LastEditors: 王强
+ * @LastEditTime: 2020-07-15 14:17:57
+--> 
 <template>
 	<div class="content">
 		<div class="friend-wrapper">

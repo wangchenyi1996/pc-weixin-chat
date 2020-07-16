@@ -1,10 +1,18 @@
+/*
+ * @Description: 
+ * @Version: 1.0
+ * @Autor: 王强
+ * @Date: 2020-07-06 09:33:42
+ * @LastEditors: 王强
+ * @LastEditTime: 2020-07-16 09:15:09
+ */ 
 const Config = require("./src/utils/config.js");
 const path = require("path");
 // 拼接路径
 const resolve = dir => require('path').join(__dirname, dir)
 let publicPath = process.env.NODE_ENV === 'production' ? '/test' : './'
 module.exports = {
-    publicPath: './',
+    publicPath: '/',
     outputDir: 'dist',
     productionSourceMap: false,
 
@@ -22,7 +30,14 @@ module.exports = {
                 pathRewrite: {
                     "^/api": "/"
                 }
-            }
+            },
+            // "/jqr": {
+            //     target: 'http://openapi.tuling123.com',
+            //     changeOrigin: true,
+            //     pathRewrite: {
+            //         "^/jqr": ""
+            //     }
+            // }
         }
     },
     chainWebpack: config => {
@@ -43,10 +58,10 @@ module.exports = {
     //         sass: {
     //             prependData: `@import '~@/common/style.scss';`
     //         },
-                // 给 stylus-loader 传递选项
-                // stylus: {
-                //     import: '~@/common/stylus/color.styl'
-                // }
+    // 给 stylus-loader 传递选项
+    // stylus: {
+    //     import: '~@/common/stylus/color.styl'
+    // }
     //     }
     // },
     // CDN配置

@@ -107,7 +107,7 @@ const state = {
   chatlist: [{
     id: 1,
     user: {
-      name: '小可爱',
+      name: '张三',
       img: require('@/static/images/mother.jpg')
     },
     messages: [{
@@ -125,7 +125,7 @@ const state = {
   {
     id: 2,
     user: {
-      name: '彭于晏',
+      name: '李四',
       img: require('@/static/images/father.jpg')
     },
     messages: [{
@@ -354,7 +354,6 @@ const mutations = {
   },
   // 得知用户当前选择的是哪个对话。便于匹配对应的对话框
   selectSession(state, value) {
-    // console.log(value,'选择列表哪一个聊天')
     state.selectId = value
   },
   // 得知用户当前选择的是哪个好友。
@@ -363,7 +362,6 @@ const mutations = {
   },
   // 发送信息
   sendMessage(state, msg) {
-    // console.log(msg,state.selectId)
     let result = state.chatlist.find(session => session.id === state.selectId);
     result.messages.push({
       content: msg.content,
@@ -404,7 +402,6 @@ const mutations = {
         }],
         index: 1
       })
-      router.push({ path: '/chat' })  // 可能不需要这行代码
     } else {
       state.selectId = msg.index
       router.push({ path: '/chat' })

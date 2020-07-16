@@ -8,8 +8,8 @@
         <img src="@/assets/icon-imgs/caputre.png" class="icon-img" />
         <img src="@/assets/icon-imgs/send-msg.png" class="icon-img" />
         <div style="margin-left:auto;" class="u-f u-f-ac">
-           <img src="@/assets/icon-imgs/voice-icon.png" class="icon-img" />
-           <img src="@/assets/icon-imgs/video-icon.png" class="icon-img" />
+          <img src="@/assets/icon-imgs/voice-icon.png" class="icon-img" />
+          <img src="@/assets/icon-imgs/video-icon.png" class="icon-img" />
         </div>
       </div>
       <transition name="showbox">
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { robotChat } from "../../utils/network/user";
 import { mapGetters, mapState } from "vuex";
 export default {
   data() {
@@ -60,7 +61,7 @@ export default {
       }
     },
     // 点击发送按钮发送信息
-    send() {
+    async send() {
       if (this.content.length <= 1) {
         this.warn = true;
         this.content = "";
@@ -69,20 +70,34 @@ export default {
         }, 1000);
       } else {
         if (this.selectedChat.user.name === "机器人") {
-          this.$http
-            .get(`https://zhaoplus.com/api/AI?search=${this.content}`)
-            .then(res => {
-              this.reply = res.data.result.text;
-              if (this.content.includes("/:")) {
-                this.reply = "嘻嘻";
-              }
-              var msg = {
-                content: this.content,
-                reply: this.reply
-              };
-              this.$store.dispatch("sendMessage", msg);
-              this.content = "";
+          let datas = {
+            content: this.content
+          };
+          let results = await robotChat(datas);
+          // console.log(results);
+          if (results.result === 0) {
+            this.$message({
+              message: "机器人回复成功",
+              type: "success",
+              duration: 500
             });
+            this.reply = results.content;
+            if (this.content.includes("/:")) {
+              this.reply = "嘻嘻";
+            }
+            var msg = {
+              content: this.content,
+              reply: this.reply
+            };
+            this.$store.dispatch("sendMessage", msg);
+            this.content = "";
+          } else {
+            this.$message({
+              message: "机器人出错了",
+              type: "error",
+              duration: 800
+            });
+          }
         } else {
           var msg = {
             content: this.content
@@ -124,7 +139,7 @@ export default {
 .text {
   position: relative;
   height: 150px;
-  background: rgba(255,255,255,.8);
+  background: rgba(255, 255, 255, 0.8);
 
   .emoji {
     position: relative;
@@ -138,8 +153,8 @@ export default {
 
     .icon-img {
       cursor: pointer;
-      width:20px;
-      height:20px;
+      width: 20px;
+      height: 20px;
       margin: 0 3px;
 
       &:hover {
@@ -180,7 +195,7 @@ export default {
     outline: none;
     font-family: 'Micrsofot Yahei';
     resize: none;
-    background-color rgba(255,255,255,0)
+    background-color: rgba(255, 255, 255, 0);
   }
 
   .send {

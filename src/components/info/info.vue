@@ -39,15 +39,19 @@
       <div class="friend-list">
         <div class="friend-item u-f u-f-sbc" v-for="item in newFriendList" :key="item.id">
           <div class="f-left u-f u-f-ac">
-            <img :src="item.img" alt="头像" class="img-face"/>
-			<div class="u-f-c">
-				<span class="txt1">{{item.wxid}}</span>
-				<span class="txt2">{{item.signature}}</span>
-			</div>
+            <img :src="item.img" alt="头像" class="img-face" />
+            <div class="u-f-c">
+              <span class="txt1">{{item.wxid}}</span>
+              <span class="txt2">{{item.signature}}</span>
+            </div>
           </div>
           <div>
-            <span class="staus-txt txt3">接受</span>
-            <span class="staus-txt txt4">拒绝</span>
+            <template v-if="item.status==1">
+              <span class="staus-txt txt3" @click.stop="receiveFriend(item)">接受</span>
+              <span class="staus-txt txt4" @click.stop="rejectFriend(item)">拒绝</span>
+            </template>
+            <span class="staus-txt text5" v-else-if="item.status==2">已添加好友</span>
+            <span class="staus-txt text5" v-else-if="item.status==3">已拒绝</span>
           </div>
         </div>
       </div>
@@ -57,16 +61,38 @@
 
 <script>
 import router from "../../router";
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapState, mapMutations } from "vuex";
 export default {
   computed: {
     ...mapGetters(["selectedFriend"]),
     ...mapState(["backImg2", "newFriendList"])
   },
   methods: {
+    ...mapMutations(["addNewFriendToList"]),
+    // 发送信息
     send() {
       this.$store.dispatch("send");
       this.$store.dispatch("search", "");
+    },
+    // 接受
+    receiveFriend(target) {
+      let idx = this.newFriendList.findIndex(item => {
+        return item.id === target.id;
+      });
+      this.newFriendList[idx].status = 2;
+      this.$message({
+        message:'添加好友成功',
+        type: "success",
+        duration: 800
+      });
+      this.addNewFriendToList(target);
+    },
+    // 拒绝
+    rejectFriend(target) {
+      let idx = this.newFriendList.findIndex(item => {
+        return item.id === target.id;
+      });
+      this.newFriendList[idx].status = 3;
     }
   }
 };
@@ -178,45 +204,63 @@ export default {
 .my-new-friends {
   width: 550px;
   height: 540px;
+  overflow-y: scroll;
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  .friend-list{
-	padding: 0 30px;
-	.friend-item{
-		padding-top:30px;
-		padding-bottom:20px;
-		border-bottom:1px solid rgba(238,238,238,0.5);
-		&:hover{
-			background-color:rgba(220,220,220,0.38);
-		}
-		.img-face{
-			height:50px;width:50px;margin-right:12px;border-radius:8px;
-		}
-		.txt1{
-			font-size 14px;
-			color:#444;
-			margin:6px 0;
-		}
-		.txt2{
-			font-size 12px;
-			color:#666;
-			margin:6px 0;
-		}
-		.txt3{
-			margin-right:12px;
-			background-color:#45c00c;
-		}
-		.txt4{
-			background-color:#f54f63;
-		}
-		.staus-txt{
-			width:100px;
-			padding:4px 10px;
-			border-radius:4px;
-			color:white;
-			cursor:pointer;
-		}
-	}
+
+  .friend-list {
+    padding: 0px 30px 20px;
+
+    .friend-item {
+      padding-top: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(238, 238, 238, 0.5);
+
+      &:hover {
+        background-color: rgba(220, 220, 220, 0.38);
+      }
+
+      .img-face {
+        height: 50px;
+        width: 50px;
+        margin-right: 12px;
+		margin-left:10px;
+        border-radius: 8px;
+      }
+
+      .staus-txt {
+        width: 100px;
+        padding: 4px 10px;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+      }
+
+      .txt1 {
+        font-size: 14px;
+        color: #444;
+        margin: 6px 0;
+      }
+
+      .txt2 {
+        font-size: 12px;
+        color: #666;
+        margin: 6px 0;
+      }
+
+      .txt3 {
+        margin-right: 12px;
+        background-color: #45c00c;
+      }
+
+      .txt4 {
+        background-color: #f54f63;
+      }
+
+      .text5 {
+        color: #757272;
+      }
+    }
   }
 }
 </style>

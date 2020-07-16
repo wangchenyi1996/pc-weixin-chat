@@ -1,11 +1,3 @@
-<!--
- * @Description: 
- * @Version: 1.0
- * @Autor: 王强
- * @Date: 2020-07-06 09:50:26
- * @LastEditors: 王强
- * @LastEditTime: 2020-07-15 09:02:08
---> 
 <!-- 好友列表 -->
 <template>
  <div class="friendlist">
