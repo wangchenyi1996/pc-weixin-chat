@@ -1,29 +1,54 @@
-## pc-weixin-chat
+## pc-weixin-chat 仿微信网页版聊天
 
-## Project setup
+## github 地址 https://github.com/wangchenyi1996/pc-weixin-chat
+
+## 前台说明： 使用 vue开发
+## 1. 安装项目依赖
 ```
 npm install
 ```
 
-## Compiles and hot-reloads for development
+## 2. 运行项目
 ```
 npm run serve
 ```
 
-## Compiles and minifies for production
+## 3. 打包项目
 ```
 npm run build
 ```
 
-## Lints and fixes files
+## 后台说明：使用nodejs、express开发
+## 1. 安装项目依赖
 ```
-npm run lint
+npm install
 ```
 
-## 技术栈
-该项目使用 Vue + vue-cli4 + vue-router + Vuex + elementui
-模仿PC端微信聊天
+## 2. 运行项目
+```
+npm start
+```
+
+## 前端技术栈
+Vue
+elementui
+vue-cli4
+vue-router 
+Vuex
+vuex-persistedstate 数据持久化
+socket.io
+
+## 后端技术栈
+nodejs
+express
+socket.io
+mongoDB
+mongoose
+cors等中间件
 
 ## 效果图如下
-![chat](http://lc-00SHgiOJ.cn-n1.lcfile.com/3276d9f05850768777ba/1.png)
-![chat](http://lc-00SHgiOJ.cn-n1.lcfile.com/bbd292c439eb7bb35cd4/2.png)
+![chat](/doc/1.png)
+![chat](/doc/2.png)
+![chat](/doc/3.png)
+![chat](/doc/4.png)
+![chat](/doc/5.png)

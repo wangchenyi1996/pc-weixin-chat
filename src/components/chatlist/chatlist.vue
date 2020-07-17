@@ -20,6 +20,9 @@
             <span class="time">{{item.messages[item.messages.length-1].date | time}}</span>
             <p class="lastmsg">{{item.messages[item.messages.length-1].content}}</p>
           </div>
+          <template v-if="user.msgCount>0">
+            <span class="msg-count" v-if="index===2">{{user.msgCount}}</span>
+          </template>
         </li>
       </ul>
     </div>
@@ -42,7 +45,7 @@
 import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   computed: {
-    ...mapState(["selectId", "searchText"]),
+    ...mapState(["selectId", "searchText",'user']),
     ...mapGetters(["searchedChatlist"])
   },
   data() {
@@ -109,6 +112,7 @@ export default {
   overflow-y: auto;
 
   .sessionlist {
+    position: relative;
     display: flex;
     padding: 12px;
     transition: background-color 0.1s;
@@ -157,6 +161,20 @@ export default {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+    }
+    .msg-count{
+      text-align:center;
+      font-size:12px;
+      min-width:20px;
+      min-height:20px;
+      line-height :20px;
+      transform:scale(0.9)
+      border-radius:100%;
+      background-color:#f54f63;
+      color:rgba(255,255,255,0.95);
+      position:absolute;
+      top:2px;
+      left:40px;
     }
   }
 

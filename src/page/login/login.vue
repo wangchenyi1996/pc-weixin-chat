@@ -4,14 +4,14 @@
  * @Autor: 王强
  * @Date: 2020-07-07 14:14:08
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-16 13:52:09
+ * @LastEditTime: 2020-07-17 09:44:31
 --> 
 <template>
   <div class="login-contain" v-if="type==1">
     <h2 class="lg-header">用户登录</h2>
     <div class="lg-main">
       <div class="u-f u-f-ajc lg-input">
-        <el-input placeholder="请输入邮箱" v-model="email" clearable>
+        <el-input placeholder="请输入邮箱" v-model.trim="email" clearable>
           <i slot="prefix" class="el-input__icon el-icon-user"></i>
         </el-input>
       </div>
@@ -50,7 +50,7 @@
     <h2 class="lg-header">用户注册</h2>
     <div class="lg-main">
       <div class="u-f u-f-ajc lg-input">
-        <el-input placeholder="请输入用户名/手机号码" v-model="username" clearable>
+        <el-input placeholder="请输入用户名/手机号码" v-model.trim="username" clearable>
           <i slot="prefix" class="el-input__icon el-icon-user"></i>
         </el-input>
       </div>
@@ -91,23 +91,23 @@ export default {
   },
   created() {
     // 监听 用户登录 socket事件
-    this.getUser()
+    // this.getUser()
   },
   methods: {
     // 获取链接socket后的用户信息
-    getUser(){
-      this.socket.on('getUsers',(result)=>{
-        console.log(result)
-        // 更改用户信息
-        this.$store.commit('getUserInfo',result.user)
-        this.$message({
-          message:result.msg,
-          type: "success",
-          duration: 1000
-        });
-        this.$router.replace('/chat')
-      })
-    },
+    // getUser(){
+    //   this.socket.on('getUsers',(result)=>{
+    //     // console.log(result)
+    //     // 更改用户信息
+    //     this.$store.commit('getUserInfo',result.user)
+    //     this.$message({
+    //       message:result.msg,
+    //       type: "success",
+    //       duration: 1000
+    //     });
+    //     this.$router.replace('/chat')
+    //   })
+    // },
 
     goReg(type) {
       this.isloading = false;
@@ -150,15 +150,16 @@ export default {
       if (result.code === 200) {
         this.isloading = false
         // 发送socket
-        this.socket.emit('userlogins',result)
-        // setTimeout(()=>{
-        //   this.$message({
-        //     message: result.msg,
-        //     type: "success",
-        //     duration: 1000
-        //   });
-        //   this.$router.replace('/chat')
-        // },1000)
+        // this.socket.emit('userlogins',result)
+        this.$store.commit('getUserInfo',result.user)
+        setTimeout(()=>{
+          this.$message({
+            message: result.msg,
+            type: "success",
+            duration: 1000
+          });
+          this.$router.replace('/chat')
+        },1000)
       } else {
         this.isloading = false
         this.$message({

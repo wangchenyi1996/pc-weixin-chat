@@ -2,7 +2,7 @@
 <template>
   <div class="mycard">
     <header @click.right.prevent="showOnline">
-      <img :src="user.img" class="avatar" @click="lookUserinfo" />
+      <img :src="user.img" class="avatar" @click="lookUserinfo" :class="user.onLineStatus ===2 ? 'leave-img' : '' " alt="头像"/>
       <span
         :class="user.onLineStatus ===1 ? 'onlines' : user.onLineStatus ===2 ? 'leaves' : user.onLineStatus ===3 ? 'busys' : 'appears'"
         class="dot"
@@ -41,7 +41,9 @@
     </div>
 
     <div class="navbar" @click="clearSearch">
-      <router-link to="/chat" class="icon iconfont icon-msg"></router-link>
+      <router-link to="/chat" class="icon iconfont icon-msg">
+        <span class="msg-count" v-if="user.msgCount>0">{{user.msgCount}}</span>
+      </router-link>
       <router-link to="/friend" class="icon iconfont icon-friend"></router-link>
       <router-link to="/my" class="icon iconfont icon-collection"></router-link>
       <router-link to="/myfile" class="icon1 icons"></router-link>
@@ -234,10 +236,27 @@ export default {
     position: relative;
     cursor: pointer;
   }
+  .leave-img{
+    filter:brightness(50%)
+  }
 
   .navbar {
     width: 100%;
     text-align: center;
+    .msg-count{
+      text-align:center;
+      font-size:12px;
+      min-width:20px;
+      min-height:20px;
+      line-height :20px;
+      transform:scale(0.9)
+      border-radius:100%;
+      background-color:#f54f63;
+      color:rgba(255,255,255,0.95);
+      position:absolute;
+      top:-10px;
+      right:6px;
+    }
   }
 
   .icons {
@@ -264,13 +283,15 @@ export default {
   }
 
   .icon {
+    position: relative;
     display: inline-block;
     font-size: 26px;
     margin-top: 28px;
     padding: 0 16px;
     box-sizing: border-box;
-    color: rgb(173, 174, 175);
-    opacity: 0.8;
+    // color: rgb(173, 174, 175);
+    color: rgba(173, 174, 175,0.8);
+    // opacity: 0.8;
     cursor: pointer;
 
     &.active {
@@ -278,7 +299,7 @@ export default {
     }
 
     &:hover {
-      opacity: 1;
+      opacity: 0.8;
     }
   }
 

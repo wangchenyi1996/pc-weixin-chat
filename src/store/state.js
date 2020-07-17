@@ -19,10 +19,11 @@ const state = {
     onLineStatus: 1, //用户当前状态
     socketid: '',
     email: '',
-    logintime: Date.now()
+    logintime: Date.now(),
+    msgCount: 18
   },
   // 新的朋友
-  newFriendList:[
+  newFriendList: [
     {
       id: 100,
       wxid: "刘德华", //微信号
@@ -33,7 +34,7 @@ const state = {
       sex: 1, //性别 1为男，0为女
       remark: "LDH", //备注
       area: "香港 九龙", //地区
-      status: 1 ,   // 1：显示 同意  拒绝 2 已添加 3 已拒绝
+      status: 1,   // 1：显示 同意  拒绝 2 已添加 3 已拒绝
     },
     {
       id: 101,
@@ -45,7 +46,7 @@ const state = {
       sex: 1, //性别 1为男，0为女
       remark: "喜剧之王-周星驰", //备注
       area: "香港 九龙", //地区
-      status: 2 ,   // 1：显示 同意  拒绝 2 已添加 3 已拒绝
+      status: 2,   // 1：显示 同意  拒绝 2 已添加 3 已拒绝
     },
     {
       id: 102,
@@ -57,7 +58,7 @@ const state = {
       sex: 0, //性别 1为男，0为女
       remark: "倩女幽魂", //备注
       area: "香港 旺角", //地区
-      status: 1 ,   // 1：显示 同意  拒绝 2 已添加 3 已拒绝
+      status: 1,   // 1：显示 同意  拒绝 2 已添加 3 已拒绝
     },
     {
       id: 103,
@@ -69,7 +70,7 @@ const state = {
       sex: 1, //性别 1为男，0为女
       remark: "忧郁男神", //备注
       area: "香港 旺角", //地区
-      status: 1 ,   // 1：显示 同意  拒绝 2 已添加 3 已拒绝
+      status: 1,   // 1：显示 同意  拒绝 2 已添加 3 已拒绝
     },
     {
       id: 104,
@@ -81,7 +82,7 @@ const state = {
       sex: 1, //性别 1为男，0为女
       remark: "四大天王", //备注
       area: "香港 旺角", //地区
-      status: 1 ,   // 1：显示 同意  拒绝 2 已添加 3 已拒绝
+      status: 1,   // 1：显示 同意  拒绝 2 已添加 3 已拒绝
     },
     {
       id: 105,
@@ -93,7 +94,7 @@ const state = {
       sex: 1, //性别 1为男，0为女
       remark: "玉女掌门人", //备注
       area: "香港 旺角", //地区
-      status: 1 ,   // 1：显示 同意  拒绝 2 已添加 3 已拒绝
+      status: 1,   // 1：显示 同意  拒绝 2 已添加 3 已拒绝
     },
   ],
   // 对话好友列表
@@ -113,7 +114,6 @@ const state = {
     }
     ],
     index: 1 // 当前在聊天列表中的位置,从1开始
-
   },
   {
     id: 2,
@@ -296,7 +296,9 @@ const state = {
   // 得知当前选择的是哪个对话
   selectId: 1,
   // 得知当前选择的是哪个好友
-  selectFriendId: 0
+  selectFriendId: 0,
+  // 聊天列表 信息索引
+  chatDelIndex: 0,
 }
 
 export default state;

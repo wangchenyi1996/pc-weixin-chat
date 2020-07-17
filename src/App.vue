@@ -21,6 +21,12 @@ export default {
   },
   created() {
     this.$store.dispatch("initData");
+  },
+  mounted() {
+    this.socket.on('getUserSocketID',(socketid)=>{
+      console.log('socketid:',socketid)
+      this.$store.commit('getSocketID',socketid)
+    })
   }
 };
 </script>

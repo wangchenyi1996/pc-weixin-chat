@@ -6,15 +6,22 @@ const mutations = {
         state.friendlist.push(friend)
     },
 
+    // 获取socketid
+    getSocketID(state,socketid){
+        state.user.socketid = socketid
+        // state.user.onLineStatus = 1
+    },
+
     // 获取用户数据
     getUserInfo(state, user) {
-        console.log('用户：', user)
+        // console.log('用户：', user)
         state.user.name = user.username
         state.user.img = user.img
-        state.user.onLineStatus = user.onlineStatus
-        state.user.socketid = user.socketid
+        // state.user.onLineStatus = user.onlineStatus
+        // state.user.socketid = user.socketid
         state.user.email = user.email
         state.user.logintime = user.logintime
+        state.user.onLineStatus = 1
     },
     // 退出登录
     logoutUser(state) {
@@ -50,6 +57,8 @@ const mutations = {
     selectSession(state, value) {
         // console.log(value,'选择列表哪一个聊天')
         state.selectId = value
+        // 让未读消息变为已读消息
+        // state.user.msgCount=0
     },
     // 得知用户当前选择的是哪个好友。
     selectFriend(state, value) {
