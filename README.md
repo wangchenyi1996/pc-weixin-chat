@@ -47,8 +47,12 @@ mongoose
 cors等中间件
 
 ## 效果图如下
-![chat](/doc/1.png)
-![chat](/doc/2.png)
-![chat](/doc/3.png)
-![chat](/doc/4.png)
-![chat](/doc/5.png)
+### 网络不好情况下，可直接看doc文件夹里的效果图即可
+![chat](./doc/1.png)
+![chat](./doc/2.png)
+![chat](./doc/4.png)
+![chat](./doc/5.png)
+![chat](./doc/6.png)
+![chat](./doc/7.png)
+![chat](./doc/8.png)
+![chat](./doc/9.png)
