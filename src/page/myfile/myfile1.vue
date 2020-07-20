@@ -24,21 +24,23 @@
     <!-- tab 对应内容 -->
     <div class="main-tab">
       <div class="tab1" v-if="currentIndex===1">
-        <div class="t-item" v-for="(item,index) in wechatMoments" :key="item.id">
+        <div class="t-item">
           <div class="u-f">
-            <img :src="item.face" alt="头像" class="face" />
+            <img src="@/static/images/q.png" alt="头像" class="face" />
             <div class="t-content">
-              <p>{{item.username}}</p>
-              <div class="f-cont">{{item.content}}</div>
+              <p>李一桐</p>
+              <div class="f-cont">纤云弄巧，飞星传恨，银汉迢迢暗度。金风玉露一相逢，便胜却人间无数。柔情似水，佳期如梦，忍顾鹊桥归路！两情若是久长时，又岂在朝朝暮暮。</div>
               <div class="img-list">
-                <img :src="img.url" v-for="img in item.imgList" :key="img.id" />
+                <img src="@/static/images/h.png" alt />
+                <img src="@/static/images/Guai.jpg" alt />
+                <img src="@/static/images/n.png" alt />
               </div>
               <div class="u-f u-f-sbc" style="color:#666;font-size:14px;margin-top:12px;">
-                <span class="times">{{item.time}}</span>
-                <div class="u-f u-f-ajc" style="cursor:pointer;">
-                  <div class="u-f u-f-ac" @click="handleActive(index)">
+                <span class="times">1小时前</span>
+                <div class="u-f u-f-ajc">
+                  <div class="u-f u-f-ac" @click="handleActive">
                     <img
-                      :src="item.active ? require('@/assets/icon-imgs/p-support-active.png') : require('@/assets/icon-imgs/p-support.png') "
+                      :src="isActive ? require('@/assets/icon-imgs/p-support-active.png') : require('@/assets/icon-imgs/p-support.png') "
                       class="c-img"
                     />
                     <span>点赞</span>
@@ -55,19 +57,11 @@
           <div class="comments">
             <div class="u-f u-f-ac">
               <i class="el-icon-star-off" style="color:#60729A;"></i>
-              <template v-if="item.persons.length>14">
-                <span
-                  v-for="person in item.persons"
-                  :key="person.id"
-                  class="person-t"
-                >{{person.name}}</span>
+              <template v-if="persons.length>14">
+                <span v-for="person in persons" :key="person.id" class="person-t">{{person.name}}</span>
               </template>
               <template v-else>
-                <span
-                  v-for="person in item.persons"
-                  :key="person.id"
-                  class="person-t"
-                >{{person.name}}</span>
+                <span v-for="person in persons" :key="person.id" class="person-t">{{person.name}}</span>
                 <i class="el-icon-more" style="color:#60729A;margin-left:10px;"></i>
               </template>
             </div>
@@ -82,7 +76,7 @@
               </div>
               <div class="com-item u-f u-f-ac">
                 <span>周星驰：</span>
-                <p>大家好，我是周星驰，喜剧之王..., 希望大家多支持支持</p>
+                <p>大家好，我是周星驰，喜剧之王...,  希望大家多支持支持</p>
               </div>
             </div>
           </div>
@@ -94,41 +88,35 @@
 </template>
 
 <script>
-import wechatMoments from "@/assets/data/wechatMonents.js";
-import { timeFrom } from "@/utils/timeFunc.js";
 export default {
   data() {
     return {
       currentIndex: 1,
       isActive: true,
-      wechatMoments: wechatMoments
+      persons: [
+        { id: 1, name: "周星驰" },
+        { id: 2, name: "刘德华" },
+        { id: 3, name: "周润发" },
+        { id: 4, name: "张学友" },
+        { id: 5, name: "关之琳" },
+        { id: 6, name: "李嘉欣" },
+        { id: 7, name: "邱淑贞" },
+        { id: 8, name: "蓝洁瑛" },
+        { id: 9, name: "陈德容" },
+        { id: 10, name: "李连杰" },
+        { id: 11, name: "黎姿" },
+        { id: 12, name: "王祖贤" },
+        { id: 13, name: "成龙" }
+      ]
     };
-  },
-  mounted() {
-    this.wechatMoments.forEach(item => {
-      item.time = timeFrom(item.time);
-    });
   },
   methods: {
     choose(index) {
       this.currentIndex = index;
     },
     // 点赞
-    handleActive(index) {
-      this.wechatMoments[index].active = !this.wechatMoments[index].active;
-      if (this.wechatMoments[index].active) {
-        this.$message({
-          message: "点赞成功",
-          type: "success",
-          duration: 600
-        });
-      } else {
-        this.$message({
-          message: "取消点赞",
-          type: "error",
-          duration: 600
-        });
-      }
+    handleActive() {
+      this.isActive = !this.isActive;
     }
   }
 };
@@ -136,7 +124,8 @@ export default {
 
 <style lang="stylus" scoped>
 .my-friends {
-  // height: 100%;
+  height: 100%;
+  padding-bottom: 12px;
 
   .tabs {
     margin: 0px auto;
@@ -191,8 +180,6 @@ export default {
         }
 
         .t-content {
-          width: 100%;
-
           p {
             font-size: 14px;
             color: #409EFF;
@@ -213,7 +200,7 @@ export default {
               margin: 0 10px;
 
               &:nth-of-type(1) {
-                margin-left: 0;
+                margin: 0;
               }
             }
           }
@@ -231,7 +218,7 @@ export default {
         margin-top: 10px;
         background-color: #E9E9E9;
         border-radius: 8px;
-        padding: 15px;
+        padding: 10px;
         box-sizing: border-box;
 
         .person-t {
@@ -239,19 +226,16 @@ export default {
           color: #60729A;
           margin-left: 8px;
         }
-
-        .com-list {
-          margin-top: 10px;
-          font-size: 13px;
-          line-height: 1.8;
-
-          .com-item {
-            span {
-              color: #60729A;
+        .com-list{
+          margin-top:10px;
+          font-size:13px;
+          line-height:1.8;
+          .com-item{
+            span{
+              color:#60729A;
             }
-
-            p {
-              color: #567;
+            p{
+              color:#567;
             }
           }
         }

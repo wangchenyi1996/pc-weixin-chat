@@ -10,7 +10,7 @@ const state = {
     { id: 1, name: '在线' }, { id: 2, name: '离开' }, { id: 3, name: '忙碌' }, { id: 4, name: '隐身' }
   ],
   // 聊天背景图
-  backImg: require('@/static/images/bg/bg1.jpg'),
+  backImg: require('@/static/images/bg/bg.png'),
   backImg2: require('@/static/images/bg/bg3.jpg'),
   // 当前登录用户
   user: {

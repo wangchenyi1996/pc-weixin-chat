@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-06 09:56:05
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-06 16:38:44
+ * @LastEditTime: 2020-07-20 09:56:27
 --> 
 <template>
   <div class="content">
@@ -12,7 +12,7 @@
       <search></search>
       <chatlist></chatlist>
     </div>
-    <div class="chatbox"  :style="{backgroundImage: 'url(' + backImg + ')', backgroundSize:'contain'}">
+    <div class="chatbox"  :style="{backgroundImage: 'url(' + backImg + ')'}">
       <message></message>
       <v-text></v-text>
     </div>

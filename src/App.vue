@@ -1,3 +1,11 @@
+<!--
+ * @Description: 
+ * @Version: 1.0
+ * @Autor: 王强
+ * @Date: 2020-07-06 09:19:13
+ * @LastEditors: 王强
+ * @LastEditTime: 2020-07-20 14:49:05
+--> 
 <template>
   <div id="app" v-if="$route.meta.isShowAside">
     <div class="sidebar">
@@ -24,7 +32,7 @@ export default {
   },
   mounted() {
     this.socket.on('getUserSocketID',(socketid)=>{
-      console.log('socketid:',socketid)
+      console.log('%c https://github.com/wangchenyi1996' , 'font-size: 18px;color: red;text-shadow: 1px 1px 0 orange');
       this.$store.commit('getSocketID',socketid)
     })
   }
@@ -50,6 +58,7 @@ export default {
     flex: 1;
     height: 600px;
     background: #f2f2f2;
+    overflow-y: scroll;
   }
 }
 </style>

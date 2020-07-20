@@ -1,8 +1,11 @@
 <!-- 消息框 -->
 <template>
   <div class="message">
-    <header class="header">
+    <header class="header u-f u-f-sbc">
       <div class="friendname">{{selectedChat.user.name}}</div>
+      <img src="@/assets/icon-imgs/c-gb.png" alt="" style="margin-left:auto;"/>
+      <img src="@/assets/icon-imgs/inform.png" alt="" />
+      <img src="@/assets/icon-imgs/c-more.png" alt="" />
     </header>
     <div class="message-wrapper" ref="list">
       <ul v-if="selectedChat">
@@ -90,12 +93,19 @@ export default {
 
   .header {
     height: 60px;
-    padding: 28px 0 0 30px;
+    padding: 0 10px;
     box-sizing: border-box;
     border-bottom: 1px solid #e7e7e7;
 
     .friendname {
       font-size: 18px;
+      color:#f5f5f5;
+    }
+    img{
+      width: 24px;
+      height: 24px;
+      margin:0 6px;
+      cursor: pointer;
     }
   }
 
