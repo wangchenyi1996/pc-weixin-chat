@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-06 09:19:13
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-16 09:05:00
+ * @LastEditTime: 2020-07-20 17:39:19
  */ 
 import Vue from 'vue'
 import App from './App.vue'
@@ -24,6 +24,14 @@ import './assets/fonts/iconfont.css';
 
 // 引入 element-ui
 import '@/elementui/index.js'
+
+// 图片预览
+import Viewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
+Vue.use(Viewer)
+Viewer.setDefaults({
+  Options: { 'inline': true, 'button': true, 'navbar': true, 'title': true, 'toolbar': true, 'tooltip': true, 'movable': true, 'zoomable': true, 'rotatable': true, 'scalable': true, 'transition': true, 'fullscreen': true, 'keyboard': true, 'url': 'data-source' }
+})
 
 // socket
 import io from '@/assets/socket/socket.io.js'

@@ -31,7 +31,10 @@
               <p>{{item.username}}</p>
               <div class="f-cont">{{item.content}}</div>
               <div class="img-list">
-                <img :src="img.url" v-for="img in item.imgList" :key="img.id" />
+                <!-- <img :src="img.url" v-for="img in item.imgList" :key="img.id" /> -->
+                <viewer :images="item.imgList">
+                  <img v-for="(src,index) in item.imgList" :src="src.url" :key="index" />
+                </viewer>
               </div>
               <div class="u-f u-f-sbc" style="color:#666;font-size:14px;margin-top:12px;">
                 <span class="times">{{item.time}}</span>
@@ -137,7 +140,6 @@ export default {
 <style lang="stylus" scoped>
 .my-friends {
   // height: 100%;
-
   .tabs {
     margin: 0px auto;
     background-color: #f2f2f2;
@@ -145,7 +147,7 @@ export default {
     color: #f1931f;
     position: sticky;
     top: 0px;
-    z-index: 9999;
+    // z-index: 9999;
     padding: 8px 0;
 
     ul {
