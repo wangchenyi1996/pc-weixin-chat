@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-06 09:19:13
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-20 17:39:19
+ * @LastEditTime: 2020-07-21 17:19:56
  */ 
 import Vue from 'vue'
 import App from './App.vue'
@@ -32,6 +32,16 @@ Vue.use(Viewer)
 Viewer.setDefaults({
   Options: { 'inline': true, 'button': true, 'navbar': true, 'title': true, 'toolbar': true, 'tooltip': true, 'movable': true, 'zoomable': true, 'rotatable': true, 'scalable': true, 'transition': true, 'fullscreen': true, 'keyboard': true, 'url': 'data-source' }
 })
+
+// 引入高德地图
+import VueAMap from 'vue-amap';
+Vue.use(VueAMap);
+VueAMap.initAMapApiLoader({
+  key: '74976c5462c5d65770f8e09772189af6',
+  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Geolocation'],
+  v: '1.4.4'
+});
+
 
 // socket
 import io from '@/assets/socket/socket.io.js'

@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-20 16:14:16
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-20 17:55:51
+ * @LastEditTime: 2020-07-21 14:30:57
  */
 export default [
     {
@@ -88,6 +88,65 @@ export default [
             { id: 11, name: "黎姿" },
             { id: 12, name: "王祖贤" },
             { id: 13, name: "成龙" }
+        ]
+    },
+    {
+        id: 5, username: '关之琳', type: 1, content: ' 伫倚危楼风细细，望极春愁，黯黯生天际。草色烟光残照里，无言谁会凭阑意？拟把疏狂图一醉，对酒当歌，强乐还无味。衣带渐宽终不悔，为伊消得人憔悴。',
+        time: 1595307209000,
+        face: require('@/static/images/q.png'),
+        active: false,
+        persons: [
+            { id: 1, name: "周星驰" },
+            { id: 10, name: "李连杰" },
+            { id: 11, name: "黎姿" },
+            { id: 12, name: "王祖贤" },
+            { id: 13, name: "成龙" }
+        ]
+    },
+    {
+        id: 6, username: '王晶', type: 1, content: '寒蝉凄切，对长亭晚，骤雨初歇。都门帐饮无绪，留恋处、兰舟催发。执手相看泪眼，竟无语凝噎。念去去、千里烟波，暮霭沉沉楚天阔。多情自古伤离别，更那堪冷落清秋节。今宵酒醒何处，杨柳岸、晓风残月。此去经年，应是良辰好景虚设。便纵有千种风情，更与何人说。',
+        video:['http://video.699pic.com/videos/75/76/40/a_U1sxjzXuyWAj1591757640.MP4','http://video.699pic.com/videos/23/82/11/a_5iFyQpDcP1YJ1588238211.mp4'],
+        time: 1595310029000,
+        face: require('@/static/images/新之助.jpg'),
+        active: false,
+        persons: [
+            { id: 1, name: "周星驰" },
+            { id: 10, name: "李连杰" },
+            { id: 11, name: "黎姿" },
+            { id: 12, name: "王祖贤" },
+            { id: 13, name: "成龙" }
+        ]
+    },
+    {
+        id: 7, username: '张家辉', type: 1, content: '寒蝉凄切，对长亭晚，骤雨初歇。都门帐饮无绪，留恋处、兰舟催发。执手相看泪眼，竟无语凝噎。念去去、千里烟波，暮霭沉沉楚天阔。多情自古伤离别，更那堪冷落清秋节。今宵酒醒何处，杨柳岸、晓风残月。此去经年，应是良辰好景虚设。便纵有千种风情，更与何人说。',
+        video:['http://video.699pic.com/videos/19/48/12/a_xShZzsmPgRpf1584194813.mp4','http://video.699pic.com/videos/36/37/93/a_XgA4njhTCM0d1587363793.mp4'],
+        time: 1595310800000,
+        face: require('@/static/images/UserAvatar.jpg'),
+        active: false,
+        persons: [
+            { id: 1, name: "周星驰" },
+            { id: 10, name: "李连杰" },
+            { id: 11, name: "黎姿" },
+            { id: 6, name: "李嘉欣" },
+            { id: 7, name: "邱淑贞" },
+            { id: 8, name: "蓝洁瑛" },
+            { id: 9, name: "陈德容" },
+            { id: 12, name: "王祖贤" },
+            { id: 13, name: "成龙" }
+        ]
+    },
+    {
+        id: 8, username: '刘德华', type: 1, content: '花褪残红青杏小。燕子飞时，绿水人家绕。枝上柳棉吹又少。天涯何处无芳草。墙里秋千墙外道。墙外行人，墙里佳人笑。笑渐不闻声渐悄。多情却被无情恼。',
+        video:['http://video.699pic.com/videos/00/36/26/a_WXNijvu4QS7R1593003626.mp4'],
+        time: 1595310800000,
+        face: require('@/static/images/father.jpg'),
+        active: false,
+        persons: [
+            { id: 1, name: "周星驰" },
+            { id: 10, name: "李连杰" },
+            { id: 11, name: "黎姿" },
+            { id: 6, name: "李嘉欣" },
+            { id: 7, name: "邱淑贞" },
         ]
     },
 

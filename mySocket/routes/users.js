@@ -162,7 +162,7 @@ router.post('/doUpload', upload.single('pic1'), (req, res) => {
   let str2 = { img: path }
   // 上传到服务器
   updateUsertoID(id,str2).then(result=>{
-    console.log(result,'返回修改后数据')
+    // console.log(result,'返回修改后数据')
     res.json({ path: path, code: 200, msg: '上传成功' })
   })
 })

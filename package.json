@@ -13,6 +13,7 @@
     "element-ui": "^2.13.2",
     "v-viewer": "^1.5.1",
     "vue": "^2.6.11",
+    "vue-amap": "^0.5.10",
     "vue-router": "^3.0.3",
     "vuex": "^3.4.0",
     "vuex-persistedstate": "^3.0.1"

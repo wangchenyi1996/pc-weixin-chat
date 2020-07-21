@@ -21,21 +21,41 @@
         </li>
       </ul>
     </div>
-    <!-- tab 对应内容 -->
+    <!-- 
+      tab 对应内容
+      需要加一个key值，否则不显示，在移动端并不会出现这个问题
+      不加key就使用v-show
+    -->
     <div class="main-tab">
-      <div class="tab1" v-if="currentIndex===1">
+      <div class="tab1" v-if="currentIndex==1" :key="currentIndex">
+        <p class="pyq">朋友圈</p>
         <div class="t-item" v-for="(item,index) in wechatMoments" :key="item.id">
           <div class="u-f">
             <img :src="item.face" alt="头像" class="face" />
             <div class="t-content">
               <p>{{item.username}}</p>
               <div class="f-cont">{{item.content}}</div>
+              <!-- 图片列表 -->
               <div class="img-list">
                 <!-- <img :src="img.url" v-for="img in item.imgList" :key="img.id" /> -->
                 <viewer :images="item.imgList">
                   <img v-for="(src,index) in item.imgList" :src="src.url" :key="index" />
                 </viewer>
               </div>
+              <!-- 视频列表 -->
+              <template v-if="item.video&&item.video.length>0">
+                <div class="video-list u-f u-f-ac">
+                  <video
+                    style="width:48%;margin:0 10px;"
+                    controls
+                    v-for="(video,index) in item.video"
+                    :key="index"
+                  >
+                    <source :src="video" type="video/mp4" />您的浏览器不支持Video标签。
+                  </video>
+                </div>
+              </template>
+
               <div class="u-f u-f-sbc" style="color:#666;font-size:14px;margin-top:12px;">
                 <span class="times">{{item.time}}</span>
                 <div class="u-f u-f-ajc" style="cursor:pointer;">
@@ -91,7 +111,78 @@
           </div>
         </div>
       </div>
-      <div class="tab2" v-else>写内容</div>
+      <div class="tab2" v-if="currentIndex==2" :key="currentIndex">
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm">
+          <el-form-item prop="expressText">
+            <el-input
+              type="textarea"
+              v-model="ruleForm.expressText"
+              :rows="5"
+              placeholder="这一刻的想法..."
+            ></el-input>
+          </el-form-item>
+        </el-form>
+        <!-- 照片组 -->
+        <div class="photo-group">
+          <el-upload
+            action="https://jsonplaceholder.typicode.com/posts/"
+            list-type="picture-card"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="handleRemove"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt />
+          </el-dialog>
+        </div>
+        <!-- 选择位置 -->
+        <div @click="dialog = true" class="u-f u-f-ac" style="cursor:pointer;margin-bottom:30px;">
+          <i class="el-icon-location-information" style="font-size:20px;color:#456;"></i>
+          <span style="margin-left:10px;color:#555;font-size:14px;">{{gpsWhere ? gpsWhere : '所在位置'}}</span>
+        </div>
+        <!-- 选择 -->
+        <el-radio-group v-model="radio" style="display:block;margin-bottom:30px;">
+          <el-radio :label="1">公开</el-radio>
+          <el-radio :label="2">私密</el-radio>
+          <el-radio :label="3">部分可见</el-radio>
+          <el-radio :label="4">不给谁看</el-radio>
+        </el-radio-group>
+        <!--  -->
+        <el-button
+          @click="resetForm('ruleForm')"
+          type="info"
+          style="width:100px;margin-right:20px;"
+        >
+          取消
+          <i class="el-icon-close" style="margin-left:4px;font-size:16px;"></i>
+        </el-button>
+        <el-button @click="submitForm('ruleForm')" type="primary" style="width:100px;">
+          发布
+          <i class="el-icon-upload el-icon--right" style="margin-left:4px;font-size:16px;"></i>
+        </el-button>
+
+        <el-dialog title="选择所在位置" :visible.sync="dialog" width="70%" :before-close="handleClose">
+          <div class="amap-wrapper">
+            <el-amap
+              ref="map"
+              :vid="'amapDemo'"
+              :center="center"
+              :zoom="zoom"
+              :plugin="plugin"
+              :events="events"
+              class="amap-demo"
+            >
+              <el-amap-marker v-for="(u,index) in markers" :position="u.position" :key="index"></el-amap-marker>
+              <el-amap-marker :position="[121.5273285, 31.21515044]" :icon="icon"></el-amap-marker>
+            </el-amap>
+          </div>
+          <!-- <div style="margin-top:15px;">
+            <el-button @click="dialog = false">取 消</el-button>
+            <el-button type="primary" @click="dialog = false">确 定</el-button>
+          </div>-->
+        </el-dialog>
+      </div>
     </div>
   </div>
 </template>
@@ -99,20 +190,121 @@
 <script>
 import wechatMoments from "@/assets/data/wechatMonents.js";
 import { timeFrom } from "@/utils/timeFunc.js";
+import axios from "axios";
+
 export default {
   data() {
     return {
-      currentIndex: 1,
+      currentIndex: 2,
       isActive: true,
-      wechatMoments: wechatMoments
+      wechatMoments: wechatMoments,
+      ruleForm: {
+        expressText: "" // 文本框
+      },
+      rules: {
+        expressText: [
+          { required: true, message: "说点什么吧!", trigger: "blur" }
+        ]
+      },
+      dialogImageUrl: "",
+      dialogVisible: false,
+      radio: 1,
+      dialog: false,
+      gpsWhere: "",
+      // 地图相关数据
+      center: [121.5273285, 31.21515044],
+      zoom: 12,
+      position: [121.5273285, 31.21515044],
+      events: {
+        init(o) {
+          console.log(o.getCenter());
+        },
+        zoomchange: e => {
+          console.log(e);
+        },
+        zoomend: e => {
+          //获取当前缩放zoom值
+          console.log(this.$refs.map.$$getInstance().getZoom());
+          console.log(e);
+        },
+        click: e => {
+          console.log(e.lnglat);
+          let lng = e.lnglat.O;
+          let lat = e.lnglat.P;
+          axios
+            .get("https://restapi.amap.com/v3/geocode/regeo?", {
+              params: {
+                key: "74976c5462c5d65770f8e09772189af6",
+                location: `${lng},${lat}`
+              }
+            })
+            .then(response => {
+              // console.log(response.data.regeocode);
+              this.gpsWhere = response.data.regeocode.formatted_address;
+              this.dialog = false;
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
+        }
+      },
+      markers: [
+        {
+          position: [121.5273285, 31.41515044]
+        },
+        {
+          position: [121.5273286, 31.31515045]
+        }
+      ],
+      //使用其他组件
+      plugin: [
+        {
+          pName: "Scale",
+          events: {
+            init(instance) {
+              console.log(instance);
+            }
+          }
+        },
+        {
+          pName: "ToolBar",
+          events: {
+            init(instance) {
+              console.log(instance);
+            }
+          }
+        }
+      ],
+      icon: require("@/assets/icon-imgs/gps.png")
     };
   },
   mounted() {
+    this.getAddress()
     this.wechatMoments.forEach(item => {
       item.time = timeFrom(item.time);
     });
   },
   methods: {
+    // 根据ip获取位置
+    // https://restapi.amap.com/v3/ip?key=74976c5462c5d65770f8e09772189af6&ip=58.213.133.150
+    getAddress() {
+      axios
+        .get("https://restapi.amap.com/v3/ip?", {
+          params: {
+            key: "74976c5462c5d65770f8e09772189af6",
+            ip: '58.213.133.150'
+          }
+        })
+        .then(response => {
+          let posi = response.data.rectangle.split(';')
+          console.log(posi[0]);
+          this.position = posi[0].split(',')
+          this.center = posi[0].split(',')
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     choose(index) {
       this.currentIndex = index;
     },
@@ -132,18 +324,65 @@ export default {
           duration: 600
         });
       }
+    },
+    // 上传照片相关
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    // 发布 取消
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$message({
+            message: "发布朋友圈成功",
+            type: "success",
+            duration: 600
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+      this.$message({
+        message: "取消成功",
+        type: "error",
+        duration: 600
+      });
+    },
+    handleClose() {
+      this.dialog = false
     }
   }
 };
 </script>
 
 <style lang="stylus" scoped>
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+.amap-demo {
+  height: 480px;
+}
+
 .my-friends {
+  background-image: url('../../static/images/bg/bg4.jpg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
   height: 100%;
-  overflow:scroll;
+  overflow-y: scroll;
+
   .tabs {
     margin: 0px auto;
-    background-color: #f2f2f2;
+    // background-color: #f2f2f2;
+    background-color: rgba(242, 242, 242, 0.8);
     width: 100%;
     color: #f1931f;
     position: sticky;
@@ -179,11 +418,20 @@ export default {
   .main-tab {
     margin: 0 20px;
 
+    .pyq {
+      font-size: 16px;
+      color: #345;
+      // border-bottom: 1px solid #e8e8e8;
+      border-bottom: 1px solid rgba(233, 233, 233, 0.6);
+      padding: 14px 0;
+    }
+
     .tab1 {
       .t-item {
         padding-bottom: 20px;
         margin-top: 20px;
-        border-bottom: 1px solid #e8e8e8;
+        // border-bottom: 1px solid #e8e8e8;
+        border-bottom: 1px solid rgba(244, 244, 244, 0.9);
 
         .face {
           height: 45px;
@@ -221,6 +469,12 @@ export default {
             }
           }
 
+          .video-list {
+            video:nth-of-type(1) {
+              margin-left: 0 !important;
+            }
+          }
+
           .c-img {
             width: 16px;
             height: 16px;
@@ -232,7 +486,8 @@ export default {
       .comments {
         margin-left: 55px;
         margin-top: 10px;
-        background-color: #E9E9E9;
+        // background-color: #E9E9E9;
+        background-color: rgba(233, 233, 233, 0.55);
         border-radius: 8px;
         padding: 15px;
         box-sizing: border-box;
@@ -258,6 +513,41 @@ export default {
             }
           }
         }
+      }
+    }
+
+    .tab2 {
+      padding-top: 15px;
+
+      .demo-ruleForm {
+        >>> .el-textarea__inner {
+          border: none;
+        }
+
+        >>> .el-textarea__inner:focus {
+          border-color: rgba(0, 0, 0, 0);
+          outline: 0;
+          box-shadow: 0px 2px 15px 0px rgba(255, 69, 0, 0.25);
+        }
+      }
+
+      .photo-group {
+        margin-top: 15px;
+        margin-bottom: 30px;
+      }
+
+      >>> .el-dialog {
+        height: 600px;
+      }
+
+      >>> .el-dialog__title {
+        line-height: 24px;
+        font-size: 16px;
+        color: #456;
+        text-align: center;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
       }
     }
   }
