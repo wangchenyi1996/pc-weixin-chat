@@ -2,7 +2,13 @@
 <template>
   <div class="mycard">
     <header @click.right.prevent="showOnline">
-      <img :src="user.img" class="avatar" @click="lookUserinfo" :class="user.onLineStatus ===2 ? 'leave-img' : '' " alt="头像"/>
+      <img
+        :src="user.img"
+        class="avatar"
+        @click="lookUserinfo"
+        :class="user.onLineStatus ===2 ? 'leave-img' : '' "
+        alt="头像"
+      />
       <span
         :class="user.onLineStatus ===1 ? 'onlines' : user.onLineStatus ===2 ? 'leaves' : user.onLineStatus ===3 ? 'busys' : 'appears'"
         class="dot"
@@ -74,12 +80,18 @@
         <el-divider></el-divider>
         <div class="h-list">
           <div style="text-align:center;">
+            <!--  
+              action="https://jsonplaceholder.typicode.com/posts/" 
+            :auto-upload='false'
+            :on-success="handleAvatarSuccess"
+            action="/upload"-->
             <el-upload
+              action=""
+              name="pic1"
               class="avatar-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
               :show-file-list="false"
-              :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
+              :http-request="doUpload"
             >
               <p>更换头像</p>
             </el-upload>
@@ -94,11 +106,7 @@
     <!-- 设置蒙版 -->
     <div class="set-cot" v-show="showSet" @click="handleshowSet">
       <el-card class="box-card">
-        <div
-          v-for="item in setList"
-          :key="item.id"
-          class="text-item"
-        >
+        <div v-for="item in setList" :key="item.id" class="text-item">
           <span>{{ item.name }}</span>
         </div>
       </el-card>
@@ -108,7 +116,9 @@
 
 <script>
 import { mapState } from "vuex";
-import { pathToBase64 } from '@/utils/base64ToImage.js'
+import { pathToBase64 } from "@/utils/base64ToImage.js";
+import { uploadImg } from "../../utils/network/user";
+import Config from "../../utils/config";
 
 export default {
   data() {
@@ -116,11 +126,11 @@ export default {
       imageUrl: "",
       ishow: false,
       showUser: false,
-      showSet:false
+      showSet: false
     };
   },
   computed: {
-    ...mapState(["user", "onlineStatusList","setList"])
+    ...mapState(["user", "onlineStatusList", "setList"])
   },
   methods: {
     // 查看用户资料
@@ -145,12 +155,12 @@ export default {
     },
 
     // 打开设置蒙版
-    showSetStatus(){
-       this.showSet = true
+    showSetStatus() {
+      this.showSet = true;
     },
 
     // 关闭设置蒙版
-     handleshowSet() {
+    handleshowSet() {
       this.showSet = false;
     },
 
@@ -163,9 +173,37 @@ export default {
       this.$store.dispatch("search", "");
     },
 
+    // 上传头像
+    async doUpload(file) {
+      // console.log(file)
+      const form = new FormData();
+      // 文件对象
+      form.append("pic1", file.file);
+      form.append("email", this.user.email);
+      form.append("id", this.user.id);
+      let result = await uploadImg(form);
+      if (result.code === 200) {
+        this.$message({
+          message: result.msg,
+          type: "success",
+          duration: 500
+        });
+        this.imageUrl = Config.domain + result.path;
+        // console.log('头像：',this.imageUrl);
+        this.$store.commit("changeFace", this.imageUrl);
+      } else {
+        this.$message({
+          message: "上传失败~~",
+          type: "error",
+          duration: 500
+        });
+      }
+    },
+    // 上传成功后
     async handleAvatarSuccess(res, file) {
+      // console.log(file, "上传成功");
       this.imageUrl = URL.createObjectURL(file.raw);
-      let base64 =await pathToBase64(this.imageUrl)
+      let base64 = await pathToBase64(this.imageUrl);
       //   console.log("新头像：", this.imageUrl);
       this.$store.commit("changeFace", base64);
     },
@@ -183,10 +221,10 @@ export default {
       return isJPG && isLt2M;
     },
     // 退出登录
-    logout(){
-      this.$store.commit('logoutUser')
-      this.$router.replace('/login')
-      this.$message('退出登录成功')
+    logout() {
+      this.$store.commit("logoutUser");
+      this.$router.replace("/login");
+      this.$message("退出登录成功");
     }
   }
 };
@@ -236,26 +274,28 @@ export default {
     position: relative;
     cursor: pointer;
   }
-  .leave-img{
-    filter:brightness(50%)
+
+  .leave-img {
+    filter: brightness(50%);
   }
 
   .navbar {
     width: 100%;
     text-align: center;
-    .msg-count{
-      text-align:center;
-      font-size:12px;
-      min-width:20px;
-      min-height:20px;
-      line-height :20px;
-      transform:scale(0.9)
-      border-radius:100%;
-      background-color:#f54f63;
-      color:rgba(255,255,255,0.95);
-      position:absolute;
-      top:-10px;
-      right:6px;
+
+    .msg-count {
+      text-align: center;
+      font-size: 12px;
+      min-width: 20px;
+      min-height: 20px;
+      line-height: 20px;
+      transform: scale(0.9);
+      border-radius: 100%;
+      background-color: #f54f63;
+      color: rgba(255, 255, 255, 0.95);
+      position: absolute;
+      top: -10px;
+      right: 6px;
     }
   }
 
@@ -290,7 +330,7 @@ export default {
     padding: 0 16px;
     box-sizing: border-box;
     // color: rgb(173, 174, 175);
-    color: rgba(173, 174, 175,0.8);
+    color: rgba(173, 174, 175, 0.8);
     // opacity: 0.8;
     cursor: pointer;
 
@@ -403,7 +443,7 @@ footer {
       line-height: 2;
       font-size: 13px;
       text-align: center;
-      cursor:pointer;
+      cursor: pointer;
     }
   }
 }
@@ -482,9 +522,10 @@ footer {
   z-index: 9;
   width: $width;
   height: $height;
-  .el-card{
-    border:none;
-    border-radius:0;
+
+  .el-card {
+    border: none;
+    border-radius: 0;
   }
 
   .box-card {
@@ -504,10 +545,11 @@ footer {
     >>> .el-card__body {
       padding: 10px;
     }
-    .text-item{
-      color:#999;
-      margin:20px 10px;
-      font-size:14px;
+
+    .text-item {
+      color: #999;
+      margin: 20px 10px;
+      font-size: 14px;
       cursor: pointer;
     }
   }

@@ -149,6 +149,7 @@ export default {
     position: sticky;
     top: 0px;
     padding: 8px 0;
+    cursor: pointer;
 
     ul {
       background-color: #FDF6EC;

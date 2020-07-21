@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-08 13:31:07
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-16 09:50:19
+ * @LastEditTime: 2020-07-21 10:57:30
  */
 import axios from '../request'
 
@@ -32,5 +32,16 @@ export function robotChat(data) {
         url: '/robot',
         method: 'get',
         params:data
+    })
+}
+
+// 上传头像
+export function uploadImg(data){
+    return axios({
+        url: '/users/doUpload',
+        method: 'post',
+        data,
+        //设置header信息
+        headers:{'Content-Type':'multipart/form-data'}
     })
 }

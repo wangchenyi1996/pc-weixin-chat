@@ -14,6 +14,7 @@ const state = {
   backImg2: require('@/static/images/bg/bg3.jpg'),
   // 当前登录用户
   user: {
+    id:'',
     name: '',
     img: require('@/static/images/UserAvatar.jpg'),
     onLineStatus: 1, //用户当前状态

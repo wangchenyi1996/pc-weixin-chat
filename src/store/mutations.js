@@ -22,6 +22,7 @@ const mutations = {
         state.user.email = user.email
         state.user.logintime = user.logintime
         state.user.onLineStatus = 1
+        state.user.id = user._id
     },
     // 退出登录
     logoutUser(state) {

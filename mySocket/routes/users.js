@@ -7,17 +7,17 @@ const mkdirp = require('mkdirp');
 
 const multer = require('multer')
 let storage = multer.diskStorage({
-  destination: async (req, file, cb)=> {
+  destination: async (req, file, cb) => {
     let day = sd.format(new Date(), 'YYYYMDD');
-    let dir = path.join('public/uploads/',day);
+    let dir = path.join('public/uploads/', day);
     // 这是一个异步操作
     await mkdirp(dir);
     cb(null, dir)   // 上传前目录必须存在
   },
   filename: function (req, file, cb) {
     let extname = path.extname(file.originalname);	 //获取文件的后缀名
-    
-    let filepath =  file.fieldname + extname
+
+    let filepath = file.fieldname + Date.now() + extname
     cb(null, filepath)
   }
 })
@@ -46,10 +46,23 @@ function findAll(condition = {}, options = {}, limit = null) {
 }
 
 /*
- *  查询单条数据 
+ * 查询单条数据 
  */
 function findOne(whereStr) {
   return userModel.findOne(whereStr)
+}
+
+/*
+ * 修改单条数据
+ */
+
+function updateUser(whereStr1,whereStr2){
+  return userModel.updateOne(whereStr1,{$set:whereStr2})
+}
+
+// 根据id来修改--返回修改后数据
+function updateUsertoID(id,whereStr){
+  return userModel.findByIdAndUpdate(id,whereStr,{new:true})
 }
 
 // 查找所有用户
@@ -122,22 +135,36 @@ router.get('/upload', (req, res) => {
   res.render("upload");
 })
 
-router.post('/doUpload', upload.single('pic1'), (req, res, next) => {
-  // req.file 是 `avatar` 文件的信息
-  // req.body 将具有文本域数据，如果存在的话
-  res.json(req.file)
-  /**
-   *  {
-        fieldname: 'pic',
-        originalname: 'vue.jpg',
-        encoding: '7bit',
-        mimetype: 'image/jpeg',
-        destination: 'uploads/',
-        filename: 'e2f5cecdaa7b1539a0f547e8be6cc9e6',
-        path: 'uploads\\e2f5cecdaa7b1539a0f547e8be6cc9e6',
-        size: 2828
-      }
-   */
+// 处理更换头像（方法一）
+// router.post('/doUpload', upload.single('pic1'), (req, res) => {
+//   // console.log('用户邮箱：',req.body.email)
+//   let email = req.body.email
+//   let id = req.body.id
+//   let path = req.file.path.replace('public\\', '')
+//   // 在数据库中替换原来的头像地址
+//   let str1 = { email: email }
+//   let str2 = { img: path }
+//   // 上传到服务器
+//   updateUser(str1,str2).then(result=>{
+//     console.log(result)
+//     res.json({ path: path, code: 200, msg: '上传成功' })
+//   })
+// })
+
+// 处理更换头像（方法二）
+router.post('/doUpload', upload.single('pic1'), (req, res) => {
+  // console.log('用户邮箱：',req.body.email)
+  let email = req.body.email
+  let id = req.body.id
+  let path = req.file.path.replace('public\\', '')
+  // 在数据库中替换原来的头像地址
+  let str1 = { email: email }
+  let str2 = { img: path }
+  // 上传到服务器
+  updateUsertoID(id,str2).then(result=>{
+    console.log(result,'返回修改后数据')
+    res.json({ path: path, code: 200, msg: '上传成功' })
+  })
 })
 
 
