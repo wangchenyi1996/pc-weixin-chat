@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-06 09:19:13
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-20 14:49:05
+ * @LastEditTime: 2020-07-21 10:13:42
 --> 
 <template>
   <div id="app" v-if="$route.meta.isShowAside">
@@ -58,7 +58,7 @@ export default {
     flex: 1;
     height: 600px;
     background: #f2f2f2;
-    overflow-y: scroll;
+    // overflow-y: scroll;
   }
 }
 </style>

@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-06 09:56:05
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-20 09:56:27
+ * @LastEditTime: 2020-07-21 10:07:13
 --> 
 <template>
   <div class="content">
@@ -12,7 +12,7 @@
       <search></search>
       <chatlist></chatlist>
     </div>
-    <div class="chatbox"  :style="{backgroundImage: 'url(' + backImg + ')'}">
+    <div class="chatbox"  :style="{backgroundImage: 'url(' + backImg + ')',backgroundSize:'cover'}">
       <message></message>
       <v-text></v-text>
     </div>
@@ -44,7 +44,7 @@ export default {
 <style lang="stylus" scoped>
 .content {
   display: flex;
-  width: 800px;
+  // width: 800px;
 
   .msglist {
     width: 250px;

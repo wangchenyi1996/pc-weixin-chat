@@ -56,7 +56,7 @@
             </div>
           </div>
           <div class="comments">
-            <div class="u-f u-f-ac">
+            <div class="u-f u-f-ac ellipsis">
               <i class="el-icon-star-off" style="color:#60729A;"></i>
               <template v-if="item.persons.length>14">
                 <span
@@ -139,7 +139,8 @@ export default {
 
 <style lang="stylus" scoped>
 .my-friends {
-  // height: 100%;
+  height: 100%;
+  overflow:scroll;
   .tabs {
     margin: 0px auto;
     background-color: #f2f2f2;
@@ -147,7 +148,6 @@ export default {
     color: #f1931f;
     position: sticky;
     top: 0px;
-    // z-index: 9999;
     padding: 8px 0;
 
     ul {

@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-20 16:14:16
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-20 17:24:02
+ * @LastEditTime: 2020-07-20 17:55:51
  */
 export default [
     {
@@ -30,7 +30,7 @@ export default [
             { id: 10, name: "李连杰" },
             { id: 11, name: "黎姿" },
             { id: 12, name: "王祖贤" },
-            { id: 13, name: "成龙" }
+            { id: 13, name: "成龙" },
         ]
     },
     {

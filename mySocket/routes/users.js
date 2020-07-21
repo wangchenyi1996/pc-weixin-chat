@@ -1,9 +1,30 @@
-let express = require('express');
-let router = express.Router();
-let md5 = require('md5');
+const express = require('express');
+const router = express.Router();
+const md5 = require('md5');
+const path = require('path');
+const sd = require('silly-datetime');
+const mkdirp = require('mkdirp');
+
+const multer = require('multer')
+let storage = multer.diskStorage({
+  destination: async (req, file, cb)=> {
+    let day = sd.format(new Date(), 'YYYYMDD');
+    let dir = path.join('public/uploads/',day);
+    // 这是一个异步操作
+    await mkdirp(dir);
+    cb(null, dir)   // 上传前目录必须存在
+  },
+  filename: function (req, file, cb) {
+    let extname = path.extname(file.originalname);	 //获取文件的后缀名
+    
+    let filepath =  file.fieldname + extname
+    cb(null, filepath)
+  }
+})
+
+let upload = multer({ storage: storage })
 
 let userModel = require('../db/schemas/users');
-// const { findOne } = require('../db/schemas/users');
 
 /**
  * 插入 单条数据 / 多条数据
@@ -44,7 +65,7 @@ router.get("/findUser", (req, res) => {
 
 // 用户注册
 router.post("/register", (req, res) => {
-  console.log(req.body,1111)
+  console.log(req.body, 1111)
   let user = {
     username: req.body.username,
     pwd: md5(req.body.pwd),
@@ -57,7 +78,7 @@ router.post("/register", (req, res) => {
       if (!result) {
         insert(user).then((data) => {
           // console.log('用户:', data);
-          res.json({code:200,user:data,msg:'注册成功'})
+          res.json({ code: 200, user: data, msg: '注册成功' })
         }).catch((err) => {
           console.log(err);
         });
@@ -82,19 +103,44 @@ router.post("/login", (req, res) => {
   }
   findAll(user).then((data) => {
     let user = data[0]
-    if(data.length>0){
+    if (data.length > 0) {
       // 有这个用户，再去判断用户名 密码
-      if(user.pwd !== md5(req.body.pwd)) {
-        return  res.json({code:100,msg:'密码错误'})
+      if (user.pwd !== md5(req.body.pwd)) {
+        return res.json({ code: 100, msg: '密码错误' })
       }
-      res.json({code:200,user,msg:'登录成功'})
-    }else{
-      res.json({code:100,msg:'不存在此用户'})
+      res.json({ code: 200, user, msg: '登录成功' })
+    } else {
+      res.json({ code: 100, msg: '不存在此用户' })
     }
   }).catch((err) => {
     console.log(err);
   });
 });
+
+// 更换头像（上传图片）
+router.get('/upload', (req, res) => {
+  res.render("upload");
+})
+
+router.post('/doUpload', upload.single('pic1'), (req, res, next) => {
+  // req.file 是 `avatar` 文件的信息
+  // req.body 将具有文本域数据，如果存在的话
+  res.json(req.file)
+  /**
+   *  {
+        fieldname: 'pic',
+        originalname: 'vue.jpg',
+        encoding: '7bit',
+        mimetype: 'image/jpeg',
+        destination: 'uploads/',
+        filename: 'e2f5cecdaa7b1539a0f547e8be6cc9e6',
+        path: 'uploads\\e2f5cecdaa7b1539a0f547e8be6cc9e6',
+        size: 2828
+      }
+   */
+})
+
+
 
 //导出去暴露使用
 module.exports = router;
