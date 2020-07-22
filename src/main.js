@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-06 09:19:13
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-21 17:19:56
+ * @LastEditTime: 2020-07-22 11:15:30
  */ 
 import Vue from 'vue'
 import App from './App.vue'
@@ -47,7 +47,6 @@ VueAMap.initAMapApiLoader({
 import io from '@/assets/socket/socket.io.js'
 Vue.prototype.socket = io('http://localhost:8888')
 // console.log(Vue.prototype.socket)
-
 
 // import Router from 'vue-router'
 // const routerPush = Router.prototype.push

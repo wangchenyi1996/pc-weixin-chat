@@ -4,7 +4,7 @@
  * @Autor: 王强
  * @Date: 2020-07-08 13:31:07
  * @LastEditors: 王强
- * @LastEditTime: 2020-07-21 10:57:30
+ * @LastEditTime: 2020-07-22 10:28:19
  */
 import axios from '../request'
 
@@ -39,6 +39,17 @@ export function robotChat(data) {
 export function uploadImg(data){
     return axios({
         url: '/users/doUpload',
+        method: 'post',
+        data,
+        //设置header信息
+        headers:{'Content-Type':'multipart/form-data'}
+    })
+}
+
+// 上传图片、视频（多张）
+export function mutiUploadFile(data){
+    return axios({
+        url: '/users/mutiUpload',
         method: 'post',
         data,
         //设置header信息

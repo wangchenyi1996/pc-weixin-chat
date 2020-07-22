@@ -124,11 +124,18 @@
         </el-form>
         <!-- 照片组 -->
         <div class="photo-group">
+          <!-- :http-request="doUpload" 覆盖默认上传的方式 -->
           <el-upload
-            action="https://jsonplaceholder.typicode.com/posts/"
+          ref="upload"
+            multiple
+            action
+            name="pic"
+            :limit="5"
             list-type="picture-card"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
+            :before-upload="beforeAvatarUpload"
+            :http-request="doUpload"
           >
             <i class="el-icon-plus"></i>
           </el-upload>
@@ -188,16 +195,20 @@
 </template>
 
 <script>
-import wechatMoments from "@/assets/data/wechatMonents.js";
+// import wechatMoments from "@/assets/data/wechatMonents.js";
 import { timeFrom } from "@/utils/timeFunc.js";
 import axios from "axios";
+import { mutiUploadFile } from "@/utils/network/user.js";
+import Config from "@/utils/config.js";
+import { mapState } from "vuex";
+import { setStore,getStore } from "@/utils/timeFunc.js";
 
 export default {
   data() {
     return {
       currentIndex: 2,
       isActive: true,
-      wechatMoments: wechatMoments,
+      wechatMoments: [],
       ruleForm: {
         expressText: "" // 文本框
       },
@@ -275,16 +286,99 @@ export default {
           }
         }
       ],
-      icon: require("@/assets/icon-imgs/gps.png")
+      icon: require("@/assets/icon-imgs/gps.png"),
+      mutiImgVideo: [], // formData
+      pathArr: [] // 后台返回的文件路径
     };
   },
+  computed: {
+    ...mapState(["user"])
+  },
+  created() {
+    this.wechatMoments = JSON.parse(getStore("moments"))
+  },
   mounted() {
-    this.getAddress()
     this.wechatMoments.forEach(item => {
-      item.time = timeFrom(item.time);
+      if (typeof item.time === "number") {
+        item.time = timeFrom(item.time);
+      }
     });
+    this.getAddress();
   },
   methods: {
+    // 上传文件
+    async doUpload(file) {
+      this.mutiImgVideo.push(file.file);
+    },
+    // 点击按钮手动上传文件
+    async handleMtuiFile() {
+      // 文件对象
+      let form = new FormData();
+      this.mutiImgVideo.forEach(item => {
+        form.append("pic", item);
+      });
+      let result = await mutiUploadFile(form);
+      if (result.code === 200) {
+        // this.pathArr.length === 1 ? this.pathArr : []
+        if (result.path.length > 1) {
+          this.pathArr = result.path.map((item, index) => {
+            return {
+              id: index + 100,
+              url: Config.upload + item
+            };
+          });
+        } else {
+          this.pathArr = result.path.map(item => {
+            return (item = Config.upload + item);
+          });
+        }
+
+        console.log("文件路径：", this.pathArr);
+        let contents = {
+          id: Date.now(),
+          username: this.user.name,
+          face: this.user.img,
+          type: 1,
+          content: this.ruleForm.expressText,
+          imgList: this.pathArr.length === 1 ? [] : this.pathArr,
+          video: this.pathArr.length === 1 ? this.pathArr : [],
+          time: timeFrom(Date.now()),
+          active: false,
+          persons: [
+            { id: 4, name: "张学友" },
+            { id: 5, name: "关之琳" },
+            { id: 6, name: "李嘉欣" },
+            { id: 7, name: "邱淑贞" },
+            { id: 8, name: "蓝洁瑛" },
+            { id: 9, name: "陈德容" },
+            { id: 10, name: "李连杰" },
+            { id: this.user.id, name: this.user.name }
+          ]
+        };
+        console.log(contents, 123);
+        // 插入到原来数据，后面会通过接口把数据存储到数据库
+        this.wechatMoments.unshift(contents);
+        setStore("moments", this.wechatMoments);
+        // 清空数据
+        this.ruleForm.expressText = ''
+        this.$refs.upload.clearFiles();
+        this.pathArr = []
+        this.$message({
+          message: result.msg,
+          type: "success",
+          duration: 500,
+          onClose: () => {
+            // console.log('关闭后回调函数');
+          }
+        });
+      } else {
+        this.$message({
+          message: "上传失败~~",
+          type: "error",
+          duration: 500
+        });
+      }
+    },
     // 根据ip获取位置
     // https://restapi.amap.com/v3/ip?key=74976c5462c5d65770f8e09772189af6&ip=58.213.133.150
     getAddress() {
@@ -292,14 +386,14 @@ export default {
         .get("https://restapi.amap.com/v3/ip?", {
           params: {
             key: "74976c5462c5d65770f8e09772189af6",
-            ip: '58.213.133.150'
+            ip: "58.213.133.150"
           }
         })
         .then(response => {
-          let posi = response.data.rectangle.split(';')
+          let posi = response.data.rectangle.split(";");
           console.log(posi[0]);
-          this.position = posi[0].split(',')
-          this.center = posi[0].split(',')
+          this.position = posi[0].split(",");
+          this.center = posi[0].split(",");
         })
         .catch(function(error) {
           console.log(error);
@@ -337,13 +431,13 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.handleMtuiFile();
           this.$message({
             message: "发布朋友圈成功",
             type: "success",
             duration: 600
           });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -357,7 +451,30 @@ export default {
       });
     },
     handleClose() {
-      this.dialog = false
+      this.dialog = false;
+    },
+    // 上传前检测
+    beforeAvatarUpload(file) {
+      // console.log(file,'检测')
+      const typeArr = [
+        "image/png",
+        "image/jpeg",
+        "image/jpg",
+        "video/mp4",
+        "video/mp3"
+      ];
+      const isJPG = typeArr.includes(file.type);
+      const isLt2M = file.size / 1024 / 1024 < 10;
+
+      if (!isJPG) {
+        this.$message.error("不支持此格式!");
+        return;
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 10MB!");
+        return;
+      }
+      return isJPG && isLt2M;
     }
   }
 };
