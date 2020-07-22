@@ -378,7 +378,6 @@ export default {
         this.ruleForm.expressText = "";
         this.$refs.upload.clearFiles();
         this.pathArr = [];
-        this.mutiImgVideo = [];
       } else {
         this.$message({
           message: "上传失败~~",

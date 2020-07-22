@@ -16,8 +16,8 @@ let storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     let extname = path.extname(file.originalname);	 //获取文件的后缀名
-    // console.log('file:',file)
-    let filepath = file.fieldname + Date.now() + extname
+    let originname = file.originalname.split('.')[0]
+    let filepath = originname + Date.now() + extname
     cb(null, filepath)
   }
 })
@@ -170,6 +170,7 @@ router.post('/doUpload', upload.single('pic1'), (req, res) => {
 // 发朋友圈--上传图片（多张）或者上传视频
 var cpUpload = upload.fields([{ name: 'pic', maxCount: 5 }])
 router.post('/mutiUpload', cpUpload, (req, res) => {
+  console.log(req.files.pic)
   let pathArr = req.files.pic.map(item=>{
     return item.path = item.path.replace('public\\', '')
   })
