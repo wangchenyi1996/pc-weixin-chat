@@ -70,15 +70,7 @@
                     <img src="@/assets/icon-imgs/p-msg.png" alt class="c-img" />
                     <span>评论</span>
                   </div>
-
-                  <el-popconfirm title="确定删除此条数据吗？" @onConfirm="deleteOne(item.id)">
-                    <img
-                      slot="reference"
-                      src="@/assets/icon-imgs/p-more.png"
-                      alt
-                      class="c-img"
-                    />
-                  </el-popconfirm>
+                  <img src="@/assets/icon-imgs/p-more.png" alt class="c-img" />
                 </div>
               </div>
             </div>
@@ -134,7 +126,7 @@
         <div class="photo-group">
           <!-- :http-request="doUpload" 覆盖默认上传的方式 -->
           <el-upload
-            ref="upload"
+          ref="upload"
             multiple
             action
             name="pic"
@@ -209,7 +201,7 @@ import axios from "axios";
 import { mutiUploadFile } from "@/utils/network/user.js";
 import Config from "@/utils/config.js";
 import { mapState } from "vuex";
-import { setStore, getStore } from "@/utils/timeFunc.js";
+import { setStore,getStore } from "@/utils/timeFunc.js";
 
 export default {
   data() {
@@ -303,7 +295,7 @@ export default {
     ...mapState(["user"])
   },
   created() {
-    this.wechatMoments = JSON.parse(getStore("moments"));
+    this.wechatMoments = JSON.parse(getStore("moments"))
   },
   mounted() {
     this.wechatMoments.forEach(item => {
@@ -314,13 +306,6 @@ export default {
     this.getAddress();
   },
   methods: {
-    // 删除某条评论
-    deleteOne(id) {
-      this.wechatMoments =this.wechatMoments.filter(item=>{
-        return item.id !== id
-      })
-      setStore("moments", this.wechatMoments);
-    },
     // 上传文件
     async doUpload(file) {
       this.mutiImgVideo.push(file.file);
@@ -375,10 +360,9 @@ export default {
         this.wechatMoments.unshift(contents);
         setStore("moments", this.wechatMoments);
         // 清空数据
-        this.ruleForm.expressText = "";
+        this.ruleForm.expressText = ''
         this.$refs.upload.clearFiles();
-        this.pathArr = [];
-        this.mutiImgVideo = [];
+        this.pathArr = []
       } else {
         this.$message({
           message: "上传失败~~",
@@ -430,11 +414,6 @@ export default {
     // 上传照片相关
     handleRemove(file, fileList) {
       console.log(file, fileList);
-      let id = file.uid;
-      this.mutiImgVideo = this.mutiImgVideo.filter(item => {
-        return item.uid !== id;
-      });
-      console.log(this.mutiImgVideo, 123);
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
@@ -450,7 +429,7 @@ export default {
             type: "success",
             duration: 600,
             onClose: () => {
-              this.currentIndex = 1;
+              this.currentIndex = 1
             }
           });
         } else {
@@ -496,11 +475,6 @@ export default {
 };
 </script>
 
-<style>
-.el-popconfirm__main {
-  margin-bottom: 10px;
-}
-</style>
 <style lang="stylus" scoped>
 ::-webkit-scrollbar {
   width: 0px;
@@ -509,6 +483,7 @@ export default {
 .amap-demo {
   height: 510px;
 }
+
 .my-friends {
   background-image: url('../../static/images/bg/bg4.jpg');
   background-size: 100% 100%;
@@ -617,7 +592,6 @@ export default {
             height: 16px;
             margin: 0 10px;
           }
-
         }
       }
 
