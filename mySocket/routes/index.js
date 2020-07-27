@@ -1,9 +1,54 @@
-var express = require('express');
-var router = express.Router();
-var axios = require('axios')
+const express = require('express');
+const router = express.Router();
+const axios = require('axios')
 
-const multer  = require('multer')
+const multer = require('multer')
 const upload = multer({ dest: 'public/uploads/' })
+// 验证码
+const nodemailer = require("nodemailer");
+// 引入工具函数
+const funcUtils = require('../utils/func')
+
+// 开启一个 SMTP 连接池
+let transport = nodemailer.createTransport({
+  host: "smtp.163.com", // 主机
+  port: 465, // SMTP 端口
+  secure: true, // 使用 SSL
+  auth: {
+    user: "wq18252718866@163.com", // 账号
+    pass: "FVDVUPSTCLBEHRVC" // 邮箱授权密码
+  }
+});
+//发送邮件
+router.post('/sendemail', (req, res) => {
+  // 随机生成的6位数字 验证码
+  let msgcode = funcUtils.MathRand2() || 888888
+  // 设置邮箱内容、收件人邮箱地址
+  let mailOptions = {
+    from: "wq18252718866@163.com", // 发件地址
+    to: req.body.email, // 收件地址
+    subject: "仿微信网页版聊天H5", // 标题
+    html: `
+      <b>thanks a for visiting 仿微信网页版聊天H5!</b>
+      </br>您的邮箱验证码为：${msgcode}  <span style="color:green;font-weight:bold;font-size:16px;margin-left:15px;">十分钟内有效</span>
+      ` 
+  }
+  // 判断 用户输入的 验证码 和 随机生成的数字 是否一致
+  if (!req.body.email.includes("@")) {
+    return res.json({ code: 100, msg: '邮箱格式不正确' })
+  }
+  transport.sendMail(mailOptions, function (error, response) {
+    if (error) {
+      return res.json({ code: 100, msg: '验证码发送失败' })
+    } else {
+      return res.json({code: 200, msg: '成功发送验证码',msgcode: msgcode})
+    }
+    transport.close(); // 如果没用，关闭连接池
+  });
+})
+router.get('/email', (req, res) => {
+  res.render("email");
+})
 
 // 机器人聊天
 router.get('/robot', function (req, res) {
@@ -28,10 +73,8 @@ router.get('/robot', function (req, res) {
     });
 });
 
-
-
 // 更换头像（上传图片）
-router.get('/upload',(req,res) => {
+router.get('/upload', (req, res) => {
   res.render("upload");
 })
 
@@ -58,7 +101,7 @@ router.get('/upload',(req,res) => {
 var cpUpload = upload.fields([{ name: 'pic1', maxCount: 1 }, { name: 'pic2', maxCount: 1 }])
 router.post('/doUpload', cpUpload, function (req, res, next) {
   // req.files 是一个对象 (String -> Array) 键是文件名，值是文件数组
-  console.log( req.files)
+  console.log(req.files)
 })
 
 module.exports = router;

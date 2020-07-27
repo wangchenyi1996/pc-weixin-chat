@@ -56,3 +56,12 @@ export function mutiUploadFile(data){
         headers:{'Content-Type':'multipart/form-data'}
     })
 }
+
+// 发送验证码
+export function sendEmailinfo(data) {
+    return axios({
+        url: '/sendemail',
+        method: 'post',
+        data
+    })
+}
