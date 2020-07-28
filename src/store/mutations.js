@@ -1,5 +1,8 @@
 import router from '../router'
 import store from './index'
+// 引入域名
+const Config = require('@/utils/config.js') 
+
 const mutations = {
     // 添加新朋友到好友列表
     addNewFriendToList(state, friend) {
@@ -16,7 +19,12 @@ const mutations = {
     getUserInfo(state, user) {
         // console.log('用户：', user)
         state.user.name = user.username
-        state.user.img = user.img
+        // 用之前加个判断
+        if(user.img.includes('http')){
+            state.user.img = user.img
+        }else{
+            state.user.img = Config.upload + user.img 
+        }
         // state.user.onLineStatus = user.onlineStatus
         // state.user.socketid = user.socketid
         state.user.email = user.email

@@ -9,6 +9,17 @@ const nodemailer = require("nodemailer");
 // 引入工具函数
 const funcUtils = require('../utils/func')
 
+// 引入验证码模型
+let codeModel = require('../db/schemas/msgcode');
+/**
+ * 插入 单条数据 / 多条数据
+ * params: data 可是是对象或者数组
+ * 调用方式：insertCode({email: '2825225@qq.com',code:'123456'})
+ */
+function insertCode(data) {
+  return codeModel.create(data)
+}
+
 // 开启一个 SMTP 连接池
 let transport = nodemailer.createTransport({
   host: "smtp.163.com", // 主机
@@ -31,7 +42,7 @@ router.post('/sendemail', (req, res) => {
     html: `
       <b>thanks a for visiting 仿微信网页版聊天H5!</b>
       </br>您的邮箱验证码为：${msgcode}  <span style="color:green;font-weight:bold;font-size:16px;margin-left:15px;">十分钟内有效</span>
-      ` 
+      `
   }
   // 判断 用户输入的 验证码 和 随机生成的数字 是否一致
   if (!req.body.email.includes("@")) {
@@ -41,7 +52,14 @@ router.post('/sendemail', (req, res) => {
     if (error) {
       return res.json({ code: 100, msg: '验证码发送失败' })
     } else {
-      return res.json({code: 200, msg: '成功发送验证码',msgcode: msgcode})
+      // 发送成功后 插入到集合
+      let obj = {email:req.body.email,code:msgcode}
+      insertCode(obj).then(codeRes=>{
+        console.log('结果：',codeRes)
+        return res.json({ code: 200, msg: '成功发送验证码', msgcode: msgcode })
+      }).catch(err=>{
+        // return res.json(err)
+      })
     }
     transport.close(); // 如果没用，关闭连接池
   });

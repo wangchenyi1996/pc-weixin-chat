@@ -1,11 +1,3 @@
-/*
- * @Description: 
- * @Version: 1.0
- * @Autor: 王强
- * @Date: 2020-07-06 09:19:13
- * @LastEditors: 王强
- * @LastEditTime: 2020-07-22 11:15:30
- */ 
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'

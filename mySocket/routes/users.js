@@ -24,8 +24,12 @@ let storage = multer.diskStorage({
 
 let upload = multer({ storage: storage })
 
+// 引入用户模型
 let userModel = require('../db/schemas/users');
+// 引入验证码模型
+let codeModel = require('../db/schemas/msgcode');
 
+/**********************************用户相关********************************* */
 /**
  * 插入 单条数据 / 多条数据
  * params: data 可是是对象或者数组
@@ -56,13 +60,19 @@ function findOne(whereStr) {
  * 修改单条数据
  */
 
-function updateUser(whereStr1,whereStr2){
-  return userModel.updateOne(whereStr1,{$set:whereStr2})
+function updateUser(whereStr1, whereStr2) {
+  return userModel.updateOne(whereStr1, { $set: whereStr2 })
 }
 
 // 根据id来修改--返回修改后数据
-function updateUsertoID(id,whereStr){
-  return userModel.findByIdAndUpdate(id,whereStr,{new:true})
+function updateUsertoID(id, whereStr) {
+  return userModel.findByIdAndUpdate(id, whereStr, { new: true })
+}
+/**********************************用户相关********************************* */
+
+/**********************************验证码********************************* */
+function deleteAllMsgcode(whereStr) {
+  return codeModel.remove(whereStr)
 }
 
 // 查找所有用户
@@ -111,8 +121,7 @@ router.post("/register", (req, res) => {
 // 用户登录
 router.post("/login", (req, res) => {
   let user = {
-    email: req.body.email,
-    // pwd: md5(req.body.pwd)
+    email: req.body.email
   }
   findAll(user).then((data) => {
     let user = data[0]
@@ -121,6 +130,14 @@ router.post("/login", (req, res) => {
       if (user.pwd !== md5(req.body.pwd)) {
         return res.json({ code: 100, msg: '密码错误' })
       }
+      // 验证码处理，用完就清空
+      deleteAllMsgcode({
+        email: req.body.email
+      }).then(code=>{
+        // console.log(code)
+      }).catch(err=>{
+        console.log(err)
+      })
       res.json({ code: 200, user, msg: '登录成功' })
     } else {
       res.json({ code: 100, msg: '不存在此用户' })
@@ -161,7 +178,7 @@ router.post('/doUpload', upload.single('pic1'), (req, res) => {
   let str1 = { email: email }
   let str2 = { img: path }
   // 上传到服务器
-  updateUsertoID(id,str2).then(result=>{
+  updateUsertoID(id, str2).then(result => {
     // console.log(result,'返回修改后数据')
     res.json({ path: path, code: 200, msg: '上传成功' })
   })
@@ -171,7 +188,7 @@ router.post('/doUpload', upload.single('pic1'), (req, res) => {
 var cpUpload = upload.fields([{ name: 'pic', maxCount: 5 }])
 router.post('/mutiUpload', cpUpload, (req, res) => {
   console.log(req.files.pic)
-  let pathArr = req.files.pic.map(item=>{
+  let pathArr = req.files.pic.map(item => {
     return item.path = item.path.replace('public\\', '')
   })
   res.json({ path: pathArr, code: 200, msg: '上传成功' })
